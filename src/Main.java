@@ -77,17 +77,21 @@ public class Main extends Application {
         tabPane.getTabs().add(tab3);
 
         VBox tabPaneVBox = new VBox(tabPane);
-        VBox newVBox = new VBox();
-        newVBox.setPadding(new Insets(10, 10, 10, 0));
-
-
-        Button appendDataButton = new Button("Click to append Data");
-        HBox appendDataHBox = new HBox(appendDataButton);
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10, 10, 10, 0));
 
 
         Button button = new Button("Click to Load text File");
         HBox loadFileHBox = new HBox(button);
         button.setOnAction(new LoadFileOperation());
+
+        Button appendDataButton = new Button("Click to append Data");
+        HBox appendDataHBox = new HBox(appendDataButton);
+
+        appendDataButton.setOnAction(new AppendDataOperation());
+
+
+
 
 
         grid.getChildren().add(tabPaneVBox);
@@ -95,17 +99,18 @@ public class Main extends Application {
 
 
         loadFileHBox.setPadding(new Insets(10, 0, 10, 0));
+        appendDataHBox.getChildren().add(appendDataTextField);
 
-        loadFileHBox.getChildren().add(appendDataTextField);
-
-        newVBox.getChildren().add(loadFileHBox);
-        newVBox.getChildren().add(textArea);
-        newVBox.getChildren().add(appendDataHBox);
+        vBox.getChildren().add(loadFileHBox);
+        vBox.getChildren().add(textArea);
+        vBox.getChildren().add(appendDataHBox);
 
 
-        newVBox.setSpacing(10);
 
-        tab1.setContent(newVBox);
+
+        vBox.setSpacing(10);
+
+        tab1.setContent(vBox);
 
 
         primaryStage.setScene(scene);
@@ -160,6 +165,10 @@ public class Main extends Application {
     }
 
     private void AppendData(String dataToAdd) {
+        this.dataInSet += dataToAdd;
 
+        System.out.println(dataInSet);
+
+        textArea.setText(this.dataInSet);
     }
 }

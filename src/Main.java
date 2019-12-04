@@ -8,34 +8,37 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 
-import java.awt.event.KeyEvent;
-import java.util.Scanner;
 
 import java.io.*;
 
 public class Main extends Application {
 
     private Text actionStatus;
+
     int[] dataSet;
 
-    private String dataInSet;
+    private String dataInSet = "";
 
     private GridPane grid = new GridPane();
 
     private TextArea textArea = new TextArea();
+
+    private TextField appendDataTextField = new TextField();
+
 
 
     public static void main(String[] args) {
 
         Main main = new Main();
 
-        String temporary = " ";
+        String temporary;
 
         System.out.println("Enter a number");
 
@@ -54,74 +57,75 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("JavaFX Welcome");
 
-        grid.setVgap(10);
-        grid.setHgap(10);
+
+
         grid.setPadding(new Insets(25, 25, 25, 25));
-        Scene scene = new Scene(grid);
 
         Button loadFile = new Button("LoadFile");
         loadFile.setOnAction(new LoadFileOperation());
 
-        Button appendData = new Button("Addend Data");
 
-        ToolBar toolBar = new ToolBar();
+        HBox hbox1 = new HBox();
+        HBox hbox2 = new HBox();
+        HBox hbox3 = new HBox();
 
-        TabPane tabPane = new TabPane();
+        Button button1 = new Button("Load File");
+        hbox1.getChildren().add(button1);
+        hbox1.setSpacing(10);
 
-        Tab tab1 = new Tab("Load File", new Label("Show all planes available"));
-        tab1.setClosable(false);
-        Tab tab2 = new Tab("Append Data Set", new Label("Show all cars available"));
-        tab2.setClosable(false);
-        Tab tab3 = new Tab("Export Report", new Label("Show all boats available"));
-        tab3.setClosable(false);
+        Button button2 = new Button("Append Data Set");
+        hbox1.getChildren().add(button2);
+
+        Button button3 = new Button("Export Report");
+        hbox1.getChildren().add(button3);
+
+        grid.getChildren().add(hbox1);
+        grid.getChildren().add(hbox2);
+        grid.getChildren().add(hbox3);
 
 
-        tabPane.getTabs().add(tab1);
-        tabPane.getTabs().add(tab2);
-        tabPane.getTabs().add(tab3);
+        TextField option = new TextField("Options");
+        option.setAlignment(Pos.CENTER);
+        option.setDisable(true);
+        option.setText("option");
+        option.setMaxWidth(100);
+        option.heightProperty();
+        VBox optionTextVbox = new VBox(option);
 
-        VBox vBox = new VBox(tabPane);
+        optionTextVbox.setPadding(new Insets(40,0,10,0));
+        grid.getChildren().add(optionTextVbox);
 
-        grid.add(vBox, 0, 0);
 
-        GridPane newGrid = new GridPane();
 
-        newGrid.setVgap(10);
-        newGrid.setHgap(10);
-        newGrid.setPadding(new Insets(25, 25, 25, 25));
-
-        Scene newScene = new Scene(newGrid);
-        Button newButton = new Button("Test");
-
-        VBox newvBox = new VBox();
-        newvBox.setPadding(new Insets(10, 10, 50, 0));
-        newvBox.setSpacing(10);
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10, 10, 10, 0));
 
         Button button = new Button("Click to Load text File");
-        button.setFont(Font.font("Amble CN", FontWeight.BOLD, 12));
+        HBox loadFileHBox = new HBox(button);
         button.setOnAction(new LoadFileOperation());
-        newvBox.getChildren().add(button);
-        newvBox.getChildren().add(textArea);
+
+        Button appendDataButton = new Button("Click to append Data");
+        HBox appendDataHBox = new HBox(appendDataButton);
+
+        appendDataButton.setOnAction(new AppendDataOperation());
 
 
-
-        tab1.setContent(newvBox);
-
+        grid.getChildren().add(loadFileHBox);
 
 
-//        Button button1 = new Button("Button 1");
-//        button1.setOnAction(new LoadFileOperation());
-//        toolBar.getItems().add(button1);
-//
-//        Button button2 = new Button("Button 2");
-//        toolBar.getItems().add(button2);
-//
-//        VBox vBox = new VBox(toolBar);
-//
-//
-//        grid.add(vBox, 0, 0);
-//
-//        grid.add(loadFile, 0, 2);
+        loadFileHBox.setPadding(new Insets(10, 0, 10, 0));
+        appendDataHBox.getChildren().add(appendDataTextField);
+
+        vBox.getChildren().add(loadFileHBox);
+        vBox.getChildren().add(textArea);
+        vBox.getChildren().add(appendDataHBox);
+
+        vBox.setSpacing(10);
+
+//        tab1.setContent(vBox);
+
+        Scene scene = new Scene(grid);
+
 
         primaryStage.setScene(scene);
 
@@ -149,7 +153,6 @@ public class Main extends Application {
                 System.out.println(line);
                 dataInSet += line;
                 line = bufferedReader.readLine();
-
             }
             textArea.setText(dataInSet);
 
@@ -169,12 +172,16 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent e) {
 
-            LoadFile();
+            AppendData(appendDataTextField.getText());
 
         }
     }
 
     private void AppendData(String dataToAdd) {
+        this.dataInSet += dataToAdd;
 
+        System.out.println(dataInSet);
+
+        textArea.setText(this.dataInSet);
     }
 }

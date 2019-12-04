@@ -71,7 +71,6 @@ public class Main extends Application {
         Tab tab3 = new Tab("Export Report", new Label("Show all boats available"));
         tab3.setClosable(false);
 
-
         tabPane.getTabs().add(tab1);
         tabPane.getTabs().add(tab2);
         tabPane.getTabs().add(tab3);
@@ -89,9 +88,6 @@ public class Main extends Application {
         HBox appendDataHBox = new HBox(appendDataButton);
 
         appendDataButton.setOnAction(new AppendDataOperation());
-
-
-
 
 
         grid.getChildren().add(tabPaneVBox);

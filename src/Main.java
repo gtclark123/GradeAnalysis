@@ -8,14 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 
-import java.awt.event.KeyEvent;
-import java.util.Scanner;
 
 import java.io.*;
 
@@ -24,18 +23,21 @@ public class Main extends Application {
     private Text actionStatus;
     int[] dataSet;
 
-    private String dataInSet;
+    private String dataInSet = "";
 
     private GridPane grid = new GridPane();
 
     private TextArea textArea = new TextArea();
+
+    private TextField appendDataTextField = new TextField();
+
 
 
     public static void main(String[] args) {
 
         Main main = new Main();
 
-        String temporary = " ";
+        String temporary;
 
         System.out.println("Enter a number");
 
@@ -54,17 +56,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("JavaFX Welcome");
 
-        grid.setVgap(10);
-        grid.setHgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid);
 
         Button loadFile = new Button("LoadFile");
         loadFile.setOnAction(new LoadFileOperation());
-
-        Button appendData = new Button("Addend Data");
-
-        ToolBar toolBar = new ToolBar();
 
         TabPane tabPane = new TabPane();
 
@@ -80,48 +76,37 @@ public class Main extends Application {
         tabPane.getTabs().add(tab2);
         tabPane.getTabs().add(tab3);
 
-        VBox vBox = new VBox(tabPane);
+        VBox tabPaneVBox = new VBox(tabPane);
+        VBox newVBox = new VBox();
+        newVBox.setPadding(new Insets(10, 10, 10, 0));
 
-        grid.add(vBox, 0, 0);
 
-        GridPane newGrid = new GridPane();
+        Button appendDataButton = new Button("Click to append Data");
+        HBox appendDataHBox = new HBox(appendDataButton);
 
-        newGrid.setVgap(10);
-        newGrid.setHgap(10);
-        newGrid.setPadding(new Insets(25, 25, 25, 25));
-
-        Scene newScene = new Scene(newGrid);
-        Button newButton = new Button("Test");
-
-        VBox newvBox = new VBox();
-        newvBox.setPadding(new Insets(10, 10, 50, 0));
-        newvBox.setSpacing(10);
 
         Button button = new Button("Click to Load text File");
-        button.setFont(Font.font("Amble CN", FontWeight.BOLD, 12));
+        HBox loadFileHBox = new HBox(button);
         button.setOnAction(new LoadFileOperation());
-        newvBox.getChildren().add(button);
-        newvBox.getChildren().add(textArea);
 
 
+        grid.getChildren().add(tabPaneVBox);
+        grid.getChildren().add(loadFileHBox);
 
-        tab1.setContent(newvBox);
+
+        loadFileHBox.setPadding(new Insets(10, 0, 10, 0));
+
+        loadFileHBox.getChildren().add(appendDataTextField);
+
+        newVBox.getChildren().add(loadFileHBox);
+        newVBox.getChildren().add(textArea);
+        newVBox.getChildren().add(appendDataHBox);
 
 
+        newVBox.setSpacing(10);
 
-//        Button button1 = new Button("Button 1");
-//        button1.setOnAction(new LoadFileOperation());
-//        toolBar.getItems().add(button1);
-//
-//        Button button2 = new Button("Button 2");
-//        toolBar.getItems().add(button2);
-//
-//        VBox vBox = new VBox(toolBar);
-//
-//
-//        grid.add(vBox, 0, 0);
-//
-//        grid.add(loadFile, 0, 2);
+        tab1.setContent(newVBox);
+
 
         primaryStage.setScene(scene);
 
@@ -169,7 +154,7 @@ public class Main extends Application {
         @Override
         public void handle(ActionEvent e) {
 
-            LoadFile();
+            AppendData(appendDataTextField.getText());
 
         }
     }

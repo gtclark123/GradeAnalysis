@@ -33,7 +33,6 @@ public class Main extends Application {
     private TextField appendDataTextField = new TextField();
 
 
-
     public static void main(String[] args) {
 
         Main main = new Main();
@@ -58,20 +57,20 @@ public class Main extends Application {
         primaryStage.setTitle("JavaFX Welcome");
 
 
-
         grid.setPadding(new Insets(25, 25, 25, 25));
 
         Button loadFile = new Button("LoadFile");
         loadFile.setOnAction(new LoadFileOperation());
 
 
-        HBox hbox1 = new HBox();
-        HBox hbox2 = new HBox();
-        HBox hbox3 = new HBox();
-
         Button button1 = new Button("Load File");
-        hbox1.getChildren().add(button1);
+        HBox hbox1 = new HBox(button1);
+
+        button1.setOnAction(new LoadFileOperation());
         hbox1.setSpacing(10);
+
+
+
 
         Button button2 = new Button("Append Data Set");
         hbox1.getChildren().add(button2);
@@ -80,8 +79,7 @@ public class Main extends Application {
         hbox1.getChildren().add(button3);
 
         grid.getChildren().add(hbox1);
-        grid.getChildren().add(hbox2);
-        grid.getChildren().add(hbox3);
+
 
 
         TextField option = new TextField("Options");
@@ -89,20 +87,66 @@ public class Main extends Application {
         option.setDisable(true);
         option.setText("option");
         option.setMaxWidth(100);
-        option.heightProperty();
         VBox optionTextVbox = new VBox(option);
-
-        optionTextVbox.setPadding(new Insets(40,0,10,0));
         grid.getChildren().add(optionTextVbox);
 
+
+//        Button Data = new Button("Data");
+//        HBox dataHbox = new HBox(Data);
+//
+//        Button Graph = new Button("Graph");
+//        HBox graphHBox = new HBox(Graph);
+//
+//        Button Analysis = new Button("Analysis");
+//        HBox analysisHBox = new HBox(Analysis);
+//
+//
+//
+//        dataHbox.setPadding(new Insets(40,20,20,200));
+//        graphHBox.setPadding(new Insets(40,20,20,250));
+//        analysisHBox.setPadding(new Insets(40,20,20,309));
+//
+//
+//
+//        grid.getChildren().add(dataHbox);
+//
+//        grid.getChildren().add(graphHBox);
+//
+//        grid.getChildren().add(analysisHBox);
+
+        TabPane tabPane = new TabPane();
+
+        Tab tab1 = new Tab("Data", new Label("Show all planes available"));
+        tab1.setClosable(false);
+        Tab tab2 = new Tab("Graph"  , new Label("Show all cars available"));
+        tab2.setClosable(false);
+        Tab tab3 = new Tab("Analysis" , new Label("Show all boats available"));
+        tab2.setClosable(false);
+        Tab tab4 = new Tab("Err Log", new Label("Show all planes available"));
+        tab4.setClosable(false);
+
+
+        tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab2);
+        tabPane.getTabs().add(tab3);
+        tabPane.getTabs().add(tab4);
+
+
+        VBox tabVBox = new VBox(tabPane);
+
+        tabVBox.setPadding(new Insets(35,50,50,150));
+
+        grid.getChildren().add(tabVBox);
+        
+        optionTextVbox.setPadding(new Insets(40, 0, 10, 0));
 
 
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10, 10, 10, 0));
 
-        Button button = new Button("Click to Load text File");
-        HBox loadFileHBox = new HBox(button);
-        button.setOnAction(new LoadFileOperation());
+//        Button button = new Button("Click to Load text File");
+//        HBox loadFileHBox = new HBox(button);
+//        button.setOnAction(new LoadFileOperation());
 
         Button appendDataButton = new Button("Click to append Data");
         HBox appendDataHBox = new HBox(appendDataButton);
@@ -110,19 +154,17 @@ public class Main extends Application {
         appendDataButton.setOnAction(new AppendDataOperation());
 
 
-        grid.getChildren().add(loadFileHBox);
-
-
-        loadFileHBox.setPadding(new Insets(10, 0, 10, 0));
+//        loadFileHBox.setPadding(new Insets(10, 0, 10, 0));
         appendDataHBox.getChildren().add(appendDataTextField);
 
-        vBox.getChildren().add(loadFileHBox);
+//        vBox.getChildren().add(loadFileHBox);
         vBox.getChildren().add(textArea);
         vBox.getChildren().add(appendDataHBox);
+//
+//        vBox.setPadding(new Insets(50, 10, 10, 10));
 
-        vBox.setSpacing(10);
-
-//        tab1.setContent(vBox);
+        tab1.setContent(vBox);
+//        grid.getChildren().add(loadFileHBox);
 
         Scene scene = new Scene(grid);
 

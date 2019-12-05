@@ -1,3 +1,8 @@
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+
+import java.awt.*;
 import java.io.*;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ public class Data {
     static public class Error {
         ErrorType type;
         String message;
+
         public Error(ErrorType type, String message) {
             this.type = type;
             this.message = message;
@@ -35,7 +41,7 @@ public class Data {
     }
 
     // Grades that were correctly parsed, for calculation purposes.
-    private ArrayList<Integer> parsedGrades;
+    private ArrayList<Float> parsedGrades;
 
     // A list of all entries, for rendering purposes.
     private ArrayList<String> entries;
@@ -53,10 +59,21 @@ public class Data {
 
 
     // List getters (immutable)
-    public List<Integer> getParsedGrades() {  return Collections.unmodifiableList(parsedGrades); }
-    public List<String> getAllEntries() {  return Collections.unmodifiableList(entries); }
-    public List<Error> getErrors() {  return Collections.unmodifiableList(errorHistory); }
-    public List<String> getInteractionHistory() {  return Collections.unmodifiableList(interactionHistory); }
+    public List<Float> getParsedGrades() {
+        return Collections.unmodifiableList(parsedGrades);
+    }
+
+    public List<String> getAllEntries() {
+        return Collections.unmodifiableList(entries);
+    }
+
+    public List<Error> getErrors() {
+        return Collections.unmodifiableList(errorHistory);
+    }
+
+    public List<String> getInteractionHistory() {
+        return Collections.unmodifiableList(interactionHistory);
+    }
 
 
     public Data(EventDispatcher dispatcher) {
@@ -106,21 +123,30 @@ public class Data {
         interactionHistory.add(interaction);
     }
 
-    private void addFullEntry(String entry){
+    private void addFullEntry(String entry) {
         entries.add(entry);
         try {
             parsedGrades.add(parseEntry(entry));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("error..");
             errorHistory.add(new Error(ErrorType.NAN, "Not a number"));
         }
     }
 
-    private int parseEntry(String entry) {
+    private float parseEntry(String entry) {
+
+        int num = 0;
 
         // throw on error
-        return 0;
+        try{
+           num = Integer.parseInt(entry);
+            // is an integer!
+        } catch (NumberFormatException e) {
+            // not an integer!
+        }
+
+        return num;
+
     }
 
     private void parseFile(String filePath) {
@@ -138,11 +164,9 @@ public class Data {
                 line = bufferedReader.readLine();
             }
 
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("no file found for this path:" + filePath);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -7,7 +7,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +17,7 @@ public class PrimaryUI {
     private Data data;
     private View activeView = null;
     private TabPane viewPane = null;
-    public Stage primaryStage;
+    private Stage primaryStage;
 
     public void updateMountedView() {
         Platform.runLater(() -> {
@@ -57,7 +56,7 @@ public class PrimaryUI {
         FileChooser fileChooser = new FileChooser();
         Button buttonLoad = new Button("Select File");
         buttonLoad.setOnAction(e -> {
-            File selectedFile = fileChooser.showOpenDialog(new PrimaryUI().primaryStage);
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
 
             try (Scanner scanner = new Scanner(selectedFile)) {
 

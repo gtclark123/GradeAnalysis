@@ -27,8 +27,10 @@ public class PrimaryUI {
 
     public void updateMountedView() {
         Platform.runLater(() -> {
-            activeView.onDataUpdate();
-            viewPane.requestLayout();
+            if (activeView != null) {
+                activeView.onDataUpdate();
+                viewPane.requestLayout();
+            }
         });
     }
 
@@ -114,7 +116,7 @@ public class PrimaryUI {
         Button enterButton = new Button("Enter Data");
 
         enterButton.setOnAction(event -> {
-            data.addFullEntry(enterTextArea.getText());
+            data.addManualEntry(enterTextArea.getText());
             enterTextArea.setText("");
         });
 
@@ -150,22 +152,6 @@ public class PrimaryUI {
         //add to tabPane
         tabPane.getTabs().add(deleteTab);
 
-
-        Tab graphTab = new Tab("Bar Chart");
-        graphTab.setClosable(false);
-
-        Button createGraphButton = new Button("Create Graph");
-
-        createGraphButton.setOnAction(event -> {
-            graphTab.setContent(data.createBarChart());
-        });
-
-        graphTab.setContent(createGraphButton);
-
-        graphTab.setOnSelectionChanged(event -> {
-            graphTab.setContent(createGraphButton);
-        });
-
         Tab createDistributionTab = new Tab("Distribution");
         createDistributionTab.setClosable(false);
 
@@ -175,51 +161,21 @@ public class PrimaryUI {
             createDistributionTab.setContent(data.distributionChart());
         });
 
-        graphTab.setContent(createDistributionButton);
-
         createDistributionTab.setOnSelectionChanged(event -> {
             createDistributionTab.setContent(createDistributionButton);
         });
 
-        tabPane.getTabs().add(graphTab);
         tabPane.getTabs().add(createDistributionTab);
 
 
-        //Create error log Tab
-        Tab errorTab = new Tab("Error Log");
-        errorTab.setClosable(false);
-
-        //add to tabPane
-        tabPane.getTabs().add(errorTab);
-
-        //Create analysis Tab
-        Tab analysisTab = new Tab("Analysis");
-        analysisTab.setClosable(false);
-
-        HBox analysisBox = new HBox(10);
-        TextArea text = new TextArea();
-        text.setEditable(false);
-        analysisBox.getChildren().addAll(
-                new Label("Analysis"),
-                text
-        );
-
-        analysisTab.setContent(analysisBox);
-
-        //add to tabPane
-        tabPane.getTabs().add(analysisTab);
-
-
-
-        tabPane.getSelectionModel().selectedIndexProperty().addListener(
-                (observable, oldIndex, newIndex) -> {
-                    if (activeView != null) activeView.onDismount();
-                    activeView = null;
-                    if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
-                        this.activeView = views[newIndex.intValue()];
-                        activeView.onMount();
-                    }
-                });
+        tabPane.getSelectionModel().selectedIndexProperty().addListener((o, oldIndex, newIndex) -> {
+            if (activeView != null) activeView.onDismount();
+            activeView = null;
+            if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
+                this.activeView = views[newIndex.intValue()];
+                activeView.onMount();
+            }
+        });
 
         // Init the active view stuff
         activeView = views[0];
@@ -230,13 +186,25 @@ public class PrimaryUI {
 
     private HBox createBoundsSection() {
         HBox boundsContainer = new HBox(5);
+
+        Button boundsUpdate;
+        TextField lowBound;
+        TextField highBound;
         boundsContainer.getChildren().addAll(
                 new Label("min-bound:"),
-                new TextField("0"),
+                lowBound = new TextField("0"),
                 new Separator(),
                 new Label("max-bound:"),
-                new TextField("100")
+                highBound = new TextField("100"),
+                boundsUpdate = new Button("Update")
         );
+
+        boundsUpdate.setOnAction((e)->{
+            data.updateBounds(lowBound.getText(), highBound.getText());
+            lowBound.setText(Float.toString(data.getBoundsMin()));
+            highBound.setText(Float.toString(data.getBoundsMax()));
+        });
+
         return boundsContainer;
     }
 }

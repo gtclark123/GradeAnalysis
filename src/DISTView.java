@@ -35,10 +35,10 @@ public class DISTView extends View {
     public void onDataUpdate() {
         // for data.getAllEntries() ...
         // update columns?
-        TextArea text = new TextArea(data.createData());
-        text.setEditable(false);
+//        TextArea text = new TextArea(data.createData());
+//        text.setEditable(false);
 
-        viewContainer.getChildren().addAll(new Label("data was updated!"), text);
+//        viewContainer.getChildren().addAll(new Label("data was updated!"), text);
     }
 }
 

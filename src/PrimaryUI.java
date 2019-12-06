@@ -144,9 +144,6 @@ public class PrimaryUI {
             graphTab.setContent(data.createBarChart());
         });
 
-        graphTab.setOnSelectionChanged(event -> {
-            graphTab.setContent(createGraphButton);
-        });
 
 
 

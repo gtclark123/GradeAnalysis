@@ -1,3 +1,7 @@
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -84,28 +88,95 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
+    public BarChart createBarChart() {
+
+        int A = 0;
+        int B = 0;
+        int C = 0;
+        int D = 0;
+        int F = 0;
+
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String, Number> bc =
+                new BarChart<String, Number>(xAxis, yAxis);
+        bc.setTitle("Grade Summary");
+        xAxis.setLabel("Grade");
+        yAxis.setLabel("Score");
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Amount of Each Grade");
+
+        System.out.println("here");
+
+        System.out.println(parsedGrades.size());
+
+        for (int i = 0; i < parsedGrades.size(); i++) {
+            if (getParsedGrades().get(i) >= 90 && getParsedGrades().get(i) <= 100) {
+                A++;
+            }
+            if (getParsedGrades().get(i) >= 80 && getParsedGrades().get(i) < 90) {
+                B++;
+
+            }
+            if (getParsedGrades().get(i) >= 70 && getParsedGrades().get(i) < 80) {
+                C++;
+            }
+            if (getParsedGrades().get(i) >= 60 && getParsedGrades().get(i) < 70) {
+                D++;
+            }
+            if (getParsedGrades().get(i) < 60) {
+                F++;
+            }
+        }
+        series1.getData().add(new XYChart.Data("A", A));
+        series1.getData().add(new XYChart.Data("B", B));
+
+        series1.getData().add(new XYChart.Data("C", C));
+
+        series1.getData().add(new XYChart.Data("D", D));
+        series1.getData().add(new XYChart.Data("F", F));
+
+
+        bc.getData().addAll(series1);
+
+
+        return bc;
+    }
+
+
+    private void clearSession() {
+        parsedGrades.clear();
+        entries.clear();
+        errorHistory.clear();
+        interactionHistory.clear();
+    }
+
     // Opens a file-browser, gets file contents, parses
-    public void openLoadFile() {
+    public void openLoadFile(String fileName) {
         System.out.println("opening browser to load file...");
         // clear everything...
-
+        clearSession();
         // open file and pass in path
-        parseFile("/Users/gannonclark/Desktop/JavaPrograms/360_Final/src/Test");
+
+        parseFile(fileName);
 
         // only if file existed
         dispatcher.dataUpdated(this);
     }
 
     // Opens a file-browser, gets file contents and appens
-    public void openAppendFile() {
+    public void openAppendFile(String fileName) {
         // open file and parse
-        parseFile("/Users/gannonclark/Desktop/JavaPrograms/360_Final/src/Test");
+        parseFile(fileName);
+
 
         // only if file existed
         dispatcher.dataUpdated(this);
     }
 
     // open a file and write a report ...
+
     public void writeReportToFile() {
         System.out.println("Writing export?");
     }
@@ -133,16 +204,25 @@ public class Data {
         }
     }
 
+    public void deleteEntry(String number) {
+        for (int i = 0; i < parsedGrades.size(); i++) {
+            if (parsedGrades.get(i) == Float.parseFloat(number)) {
+                parsedGrades.remove(i);
+                break;
+            }
+        }
+    }
+
     private float parseEntry(String entry) {
 
-        int num = 0;
-
+        float num = 0;
         // throw on error
-        try{
-           num = Integer.parseInt(entry);
+        try {
+            num = Integer.parseInt(entry);
             // is an integer!
         } catch (NumberFormatException e) {
             // not an integer!
+            System.out.println("Not a number");
         }
 
         return num;
@@ -150,16 +230,16 @@ public class Data {
     }
 
     private void parseFile(String filePath) {
+
         // on error add error type?
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filePath)));
 
-
             String line = bufferedReader.readLine();
 
             while (line != null) {
-                System.out.println(line);
+//                System.out.println(line);
                 addFullEntry(line);
                 line = bufferedReader.readLine();
             }

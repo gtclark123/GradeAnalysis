@@ -74,6 +74,9 @@ public class PrimaryUI {
         Button buttonAppend = new Button("Append");
         buttonAppend.setOnAction(ev -> data.openAppendFile());
 
+        Button buttonDelete = new Button("Delete");
+        buttonDelete.setonAction(ev -> data.deleteEntry());
+
         Button buttonExportReport = new Button("Export Report");
         buttonExportReport.setOnAction(ev -> data.writeReportToFile());
 
@@ -82,6 +85,7 @@ public class PrimaryUI {
         toolbar.getItems().addAll(
                 buttonLoad,
                 buttonAppend,
+                buttonDelete,
                 buttonExportReport
         );
 

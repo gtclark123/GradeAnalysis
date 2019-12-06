@@ -40,6 +40,16 @@ public class Data {
         }
     }
 
+    static public class DataEntry {
+        int parsedGrade = 0;
+        String entry = "";
+
+        public DataEntry(int parsedGrade, String entry) {
+           this.parsedGrade = parsedGrade;
+           this.entry = entry;
+        }
+    }
+
     // Grades that were correctly parsed, for calculation purposes.
     private ArrayList<Float> parsedGrades;
 
@@ -84,13 +94,18 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
+
+    public boolean deleteEntry(DataEntry selectedEntry) {
+        return parsedGrades.remove(selectedEntry) || entries.remove(selectedEntry);
+    }
+
     // Opens a file-browser, gets file contents, parses
     public void openLoadFile() {
         System.out.println("opening browser to load file...");
         // clear everything...
 
         // open file and pass in path
-        parseFile("/Users/gannonclark/Desktop/JavaPrograms/360_Final/src/Test");
+        parseFile("\\Users\\Solids\\Documents\\GradeAnalysis-master\\GradeAnalysis\\test");
 
         // only if file existed
         dispatcher.dataUpdated(this);
@@ -99,7 +114,7 @@ public class Data {
     // Opens a file-browser, gets file contents and appens
     public void openAppendFile() {
         // open file and parse
-        parseFile("/Users/gannonclark/Desktop/JavaPrograms/360_Final/src/Test");
+        parseFile("\\Users\\Solids\\Documents\\GradeAnalysis-master\\GradeAnalysis\\test");
 
         // only if file existed
         dispatcher.dataUpdated(this);

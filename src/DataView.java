@@ -19,8 +19,7 @@ public class DataView extends View {
 
     @Override
     public Node createView() {
-        //box.getChildren().add();
-        viewContainer = new VBox(new Label("Data View"));
+        viewContainer = new VBox();
 
         column = new Label();
         viewContainer.getChildren().add(column);
@@ -30,9 +29,9 @@ public class DataView extends View {
 
     private void updateDataText(){
 
-        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
+        ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
 
-        Collections.sort(gradesList,Collections.reverseOrder());
+        Collections.sort(gradesList);
         String join = "";
         int counter = 0;
 
@@ -46,31 +45,20 @@ public class DataView extends View {
             }
         }
 
+        if (gradesList.isEmpty()) {
+            join = "No data has been entered.";
+        }
+
         column.setText(join);
 
     }
 
     @Override
-    public void onMount() {
-        // mounted ...
-        updateDataText();
-        viewContainer.getChildren().add(new Label("mounted on to view"));
-    }
+    public void onMount() {  updateDataText(); }
 
     @Override
-    public void onDismount() {
-        // do something if necessary
-        // data.removeXYZ
-        updateDataText();
-        viewContainer.getChildren().add(new Label("removed from view"));
-    }
+    public void onDismount() {}
 
     @Override
-    public void onDataUpdate() {
-        // for data.getAllEntries() ...
-        // update columns?
-        updateDataText();
-
-        viewContainer.getChildren().addAll(new Label("data was updated!"));
-    }
+    public void onDataUpdate() { updateDataText(); }
 }

@@ -1,60 +1,46 @@
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ErrorView extends View {
-
+    TableView errorTable;
     VBox viewContainer;
-    Label error;
 
     public ErrorView(Data data) {
-        super(data, "Error");
+        super(data, "Errors");
     }
 
     @Override
     public Node createView() {
-        //box.getChildren().add();
-        viewContainer = new VBox(new Label("Error View"));
+        viewContainer = new VBox();
 
-        error = new Label();
-        viewContainer.getChildren().add(error);
+        viewContainer.getChildren().add(errorTable = new TableView());
+
+        TableColumn<String, Data.Error> column1 = new TableColumn<>("Error Type");
+        column1.setCellValueFactory(new PropertyValueFactory<>("errorType"));
+        TableColumn<String, Data.Error> column2 = new TableColumn<>("Message");
+        column2.setCellValueFactory(new PropertyValueFactory<>("errorMessage"));
+        errorTable.getColumns().addAll(column1, column2);
 
         return viewContainer;
     }
 
     private void updateErrorText(){
-
-        error.setText(data.getErrors().toString());
-        error.setText("test");
+        errorTable.getItems().clear();
+        errorTable.getItems().addAll(data.getErrors());
     }
 
     @Override
-    public void onMount() {
-        // mounted ...
-        updateErrorText();
-        viewContainer.getChildren().add(new Label("mounted on to view"));
-    }
+    public void onMount() { updateErrorText(); }
 
     @Override
-    public void onDismount() {
-        // do something if necessary
-        // data.removeXYZ
-        updateErrorText();
-        viewContainer.getChildren().add(new Label("removed from view"));
-    }
+    public void onDismount() {}
 
     @Override
-    public void onDataUpdate() {
-        // for data.getAllEntries() ...
-        // update columns?
-        updateErrorText();
-
-        viewContainer.getChildren().addAll(new Label("data was updated!"));
-    }
+    public void onDataUpdate() { updateErrorText(); }
 }

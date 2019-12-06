@@ -27,8 +27,10 @@ public class PrimaryUI {
 
     public void updateMountedView() {
         Platform.runLater(() -> {
-            activeView.onDataUpdate();
-            viewPane.requestLayout();
+            if (activeView != null) {
+                activeView.onDataUpdate();
+                viewPane.requestLayout();
+            }
         });
     }
 
@@ -103,6 +105,29 @@ public class PrimaryUI {
             tabPane.getTabs().add(viewTab);
         }
 
+        Tab enterDataTab = new Tab("Enter Data");
+        enterDataTab.setClosable(false);
+
+
+        tabPane.getTabs().add(enterDataTab);
+        HBox enterBox = new HBox(10);
+        enterBox.setPadding(new Insets(10,10,10,10));
+        TextField enterTextArea = new TextField("");
+        Button enterButton = new Button("Enter Data");
+
+        enterButton.setOnAction(event -> {
+            data.addManualEntry(enterTextArea.getText());
+            enterTextArea.setText("");
+        });
+
+        enterBox.getChildren().addAll(
+                new Label("Enter Data Here:"),
+                enterTextArea,
+                enterButton
+        );
+
+        enterDataTab.setContent(enterBox);
+
         //Create delete Tab
         Tab deleteTab = new Tab("Delete");
         deleteTab.setClosable(false);
@@ -127,32 +152,30 @@ public class PrimaryUI {
         //add to tabPane
         tabPane.getTabs().add(deleteTab);
 
+        Tab createDistributionTab = new Tab("Distribution");
+        createDistributionTab.setClosable(false);
 
-        Tab graphTab = new Tab("Graph");
-        graphTab.setClosable(false);
+        Button createDistributionButton = new Button("Create Distribution");
 
-        Button createGraphButton = new Button("Create Graph");
-
-        createGraphButton.setOnAction(event -> {
-            graphTab.setContent(data.createBarChart());
+        createDistributionButton.setOnAction(event -> {
+            createDistributionTab.setContent(data.distributionChart());
         });
 
+        createDistributionTab.setOnSelectionChanged(event -> {
+            createDistributionTab.setContent(createDistributionButton);
+        });
+
+        tabPane.getTabs().add(createDistributionTab);
 
 
-
-        graphTab.setContent(createGraphButton);
-
-        tabPane.getTabs().add(graphTab);
-
-        tabPane.getSelectionModel().selectedIndexProperty().addListener(
-                (observable, oldIndex, newIndex) -> {
-                    if (activeView != null) activeView.onDismount();
-                    activeView = null;
-                    if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
-                        this.activeView = views[newIndex.intValue()];
-                        activeView.onMount();
-                    }
-                });
+        tabPane.getSelectionModel().selectedIndexProperty().addListener((o, oldIndex, newIndex) -> {
+            if (activeView != null) activeView.onDismount();
+            activeView = null;
+            if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
+                this.activeView = views[newIndex.intValue()];
+                activeView.onMount();
+            }
+        });
 
         // Init the active view stuff
         activeView = views[0];
@@ -163,46 +186,27 @@ public class PrimaryUI {
 
     private HBox createBoundsSection() {
         HBox boundsContainer = new HBox(5);
+
+        Button boundsUpdate;
+        TextField lowBound;
+        TextField highBound;
         boundsContainer.getChildren().addAll(
                 new Label("min-bound:"),
-                new TextField("0"),
+                lowBound = new TextField("0"),
                 new Separator(),
                 new Label("max-bound:"),
-                new TextField("100")
+                highBound = new TextField("100"),
+                boundsUpdate = new Button("Update")
         );
+
+        boundsUpdate.setOnAction((e)->{
+            data.updateBounds(lowBound.getText(), highBound.getText());
+            lowBound.setText(Float.toString(data.getBoundsMin()));
+            highBound.setText(Float.toString(data.getBoundsMax()));
+        });
+
         return boundsContainer;
     }
 }
 
-//try {
-//        BufferedReader bufferedReader = new BufferedReader(new FileReader(selectedFile));
-//
-//        String line = bufferedReader.readLine();
-//        int i = 0;
-//        while (line != null) {
-//        entries.add(i, line);
-//        System.out.println(line);
-//        line = bufferedReader.readLine();
-//        i++;
-//        }
-//
-//        } catch (IOException ex) {
-//        System.out.println("no file found for this path:" + ex);
-//        }
-
-//
-//
-//        series1.getData().add(new XYChart.Data("brazil", 20148.82));
-//        series1.getData().add(new XYChart.Data("France", 10000));
-//        series1.getData().add(new XYChart.Data("Italy", 35407.15));
-//        series1.getData().add(new XYChart.Data("USA", 12000));
-//
-//        XYChart.Series series2 = new XYChart.Series();
-//        series2.setName("2004");
-//        series2.getData().add(new XYChart.Data("australia", 57401.85));
-//        series2.getData().add(new XYChart.Data("brazil", 41941.19));
-//        series2.getData().add(new XYChart.Data("France", 45263.37));
-//        series2.getData().add(new XYChart.Data("Italy", 117320.16));
-//        series2.getData().add(new XYChart.Data("USA", 14845.27));
-//
 

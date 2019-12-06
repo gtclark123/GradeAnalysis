@@ -1,28 +1,36 @@
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class PrimaryUI {
+
     private Data data;
     private View activeView = null;
     private TabPane viewPane = null;
     private Stage primaryStage;
 
+
     public void updateMountedView() {
         Platform.runLater(() -> {
-            activeView.onDataUpdate();
-            viewPane.requestLayout();
+            if (activeView != null) {
+                activeView.onDataUpdate();
+                viewPane.requestLayout();
+            }
         });
     }
 
@@ -49,43 +57,39 @@ public class PrimaryUI {
     }
 
     private ToolBar createToolbar() {
-//        Button buttonLoad = new Button("Load");
-//        buttonLoad.setOnAction(ev -> data.openLoadFile() );
-
 
         FileChooser fileChooser = new FileChooser();
         Button buttonLoad = new Button("Select File");
-        buttonLoad.setOnAction(e -> {
+
+        buttonLoad.setOnAction(event -> {
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            data.openLoadFile(selectedFile.toString());
+            data.getAllEntries().forEach(System.out::println);
 
-            try (Scanner scanner = new Scanner(selectedFile)) {
+        });
 
-                while (scanner.hasNext())
-                    System.out.println(scanner.next());
+        FileChooser appendFileChooser = new FileChooser();
+        Button appendButtonLoad = new Button("Append File");
 
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-            }
-
+        appendButtonLoad.setOnAction(event -> {
+            File appendSelectedFile = appendFileChooser.showOpenDialog(primaryStage);
+            data.openAppendFile(appendSelectedFile.toString());
+            data.getAllEntries().forEach(System.out::println);
         });
 
 
 
-        Button buttonAppend = new Button("Append");
-        buttonAppend.setOnAction(ev -> data.openAppendFile());
-
-        Button buttonDelete = new Button("Delete");
-        buttonDelete.setonAction(ev -> data.deleteEntry());
+//        Button buttonAppend = new Button("Append");
 
         Button buttonExportReport = new Button("Export Report");
         buttonExportReport.setOnAction(ev -> data.writeReportToFile());
+
 
         // File toolbar
         ToolBar toolbar = new ToolBar();
         toolbar.getItems().addAll(
                 buttonLoad,
-                buttonAppend,
-                buttonDelete,
+                appendButtonLoad,
                 buttonExportReport
         );
 
@@ -101,17 +105,77 @@ public class PrimaryUI {
             tabPane.getTabs().add(viewTab);
         }
 
-        tabPane.getTabs().add(new Tab("<Add more views to ViewFactor>", null));
+        Tab enterDataTab = new Tab("Enter Data");
+        enterDataTab.setClosable(false);
 
-        tabPane.getSelectionModel().selectedIndexProperty().addListener(
-                (observable, oldIndex, newIndex) -> {
-                    if (activeView != null) activeView.onDismount();
-                    activeView = null;
-                    if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
-                        this.activeView = views[newIndex.intValue()];
-                        activeView.onMount();
-                    }
-                });
+
+        tabPane.getTabs().add(enterDataTab);
+        HBox enterBox = new HBox(10);
+        enterBox.setPadding(new Insets(10,10,10,10));
+        TextField enterTextArea = new TextField("");
+        Button enterButton = new Button("Enter Data");
+
+        enterButton.setOnAction(event -> {
+            data.addManualEntry(enterTextArea.getText());
+            enterTextArea.setText("");
+        });
+
+        enterBox.getChildren().addAll(
+                new Label("Enter Data Here:"),
+                enterTextArea,
+                enterButton
+        );
+
+        enterDataTab.setContent(enterBox);
+
+        //Create delete Tab
+        Tab deleteTab = new Tab("Delete");
+        deleteTab.setClosable(false);
+
+        //Add create text box and label
+        HBox deleteBox = new HBox(10);
+        deleteBox.setPadding(new Insets(10,0,10,0));
+
+        Button deleteButton = new Button("Click to delete Button");
+
+        TextField deleteTextField = new TextField("");
+
+        deleteButton.setOnAction(event -> {
+            data.deleteEntry(deleteTextField.getText());
+            data.getParsedGrades().forEach(System.out::println);
+
+        });
+        deleteBox.getChildren().addAll(new Label("Enter a number to delete "),deleteTextField, deleteButton);
+
+        deleteTab.setContent(deleteBox);
+
+        //add to tabPane
+        tabPane.getTabs().add(deleteTab);
+
+        Tab createDistributionTab = new Tab("Distribution");
+        createDistributionTab.setClosable(false);
+
+        Button createDistributionButton = new Button("Create Distribution");
+
+        createDistributionButton.setOnAction(event -> {
+            createDistributionTab.setContent(data.distributionChart());
+        });
+
+        createDistributionTab.setOnSelectionChanged(event -> {
+            createDistributionTab.setContent(createDistributionButton);
+        });
+
+        tabPane.getTabs().add(createDistributionTab);
+
+
+        tabPane.getSelectionModel().selectedIndexProperty().addListener((o, oldIndex, newIndex) -> {
+            if (activeView != null) activeView.onDismount();
+            activeView = null;
+            if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
+                this.activeView = views[newIndex.intValue()];
+                activeView.onMount();
+            }
+        });
 
         // Init the active view stuff
         activeView = views[0];
@@ -122,13 +186,27 @@ public class PrimaryUI {
 
     private HBox createBoundsSection() {
         HBox boundsContainer = new HBox(5);
+
+        Button boundsUpdate;
+        TextField lowBound;
+        TextField highBound;
         boundsContainer.getChildren().addAll(
                 new Label("min-bound:"),
-                new TextField("0"),
+                lowBound = new TextField("0"),
                 new Separator(),
                 new Label("max-bound:"),
-                new TextField("100")
+                highBound = new TextField("100"),
+                boundsUpdate = new Button("Update")
         );
+
+        boundsUpdate.setOnAction((e)->{
+            data.updateBounds(lowBound.getText(), highBound.getText());
+            lowBound.setText(Float.toString(data.getBoundsMin()));
+            highBound.setText(Float.toString(data.getBoundsMax()));
+        });
+
         return boundsContainer;
     }
 }
+
+

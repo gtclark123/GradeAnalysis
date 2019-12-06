@@ -1,4 +1,3 @@
-import com.sun.tools.doclets.internal.toolkit.Content;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -104,11 +103,26 @@ public class PrimaryUI {
             tabPane.getTabs().add(viewTab);
         }
 
-        Tab moreViewsTab = new Tab("<Add more views to ViewFactor>");
-        moreViewsTab.setClosable(false);
+        Tab enterDataTab = new Tab("Enter Data");
+        enterDataTab.setClosable(false);
 
 
-        tabPane.getTabs().add(moreViewsTab);
+        tabPane.getTabs().add(enterDataTab);
+        HBox enterBox = new HBox(10);
+        TextArea enterTextArea = new TextArea("");
+        Button enterButton = new Button("Enter Data");
+
+        enterButton.setOnAction(event -> {
+            data.addManualEntry(enterTextArea.getText().toString());
+        });
+
+        enterBox.getChildren().addAll(
+                new Label("Enter Data Here:"),
+                enterTextArea,
+                enterButton
+        );
+
+        enterDataTab.setContent(enterBox);
 
         //Create delete Tab
         Tab deleteTab = new Tab("Delete");
@@ -135,7 +149,7 @@ public class PrimaryUI {
         tabPane.getTabs().add(deleteTab);
 
 
-        Tab graphTab = new Tab("Graph");
+        Tab graphTab = new Tab("Bar Chart");
         graphTab.setClosable(false);
 
         Button createGraphButton = new Button("Create Graph");
@@ -150,13 +164,42 @@ public class PrimaryUI {
             graphTab.setContent(createGraphButton);
         });
 
-        Tab errorLogTab = new Tab("Error Log");
-        errorLogTab.setClosable(false);
+        Tab createDistributionTab = new Tab("Distribution");
+        createDistributionTab.setClosable(false);
 
+        Button createDistributionButton = new Button();
+        createDistributionButton.setOnAction(event -> {
+            createDistributionTab.setContent(data.distributionChart());
+        });
 
 
         tabPane.getTabs().add(graphTab);
-        tabPane.getTabs().add(errorLogTab);
+
+
+        //Create error log Tab
+        Tab errorTab = new Tab("Error Log");
+        errorTab.setClosable(false);
+
+        //add to tabPane
+        tabPane.getTabs().add(errorTab);
+
+        //Create analysis Tab
+        Tab analysisTab = new Tab("Analysis");
+        analysisTab.setClosable(false);
+
+        HBox analysisBox = new HBox(10);
+        TextArea text = new TextArea();
+        text.setEditable(false);
+        analysisBox.getChildren().addAll(
+                new Label("Analysis"),
+                text
+        );
+
+        analysisTab.setContent(analysisBox);
+
+        //add to tabPane
+        tabPane.getTabs().add(analysisTab);
+
 
 
         tabPane.getSelectionModel().selectedIndexProperty().addListener(
@@ -189,35 +232,4 @@ public class PrimaryUI {
     }
 }
 
-//try {
-//        BufferedReader bufferedReader = new BufferedReader(new FileReader(selectedFile));
-//
-//        String line = bufferedReader.readLine();
-//        int i = 0;
-//        while (line != null) {
-//        entries.add(i, line);
-//        System.out.println(line);
-//        line = bufferedReader.readLine();
-//        i++;
-//        }
-//
-//        } catch (IOException ex) {
-//        System.out.println("no file found for this path:" + ex);
-//        }
-
-//
-//
-//        series1.getData().add(new XYChart.Data("brazil", 20148.82));
-//        series1.getData().add(new XYChart.Data("France", 10000));
-//        series1.getData().add(new XYChart.Data("Italy", 35407.15));
-//        series1.getData().add(new XYChart.Data("USA", 12000));
-//
-//        XYChart.Series series2 = new XYChart.Series();
-//        series2.setName("2004");
-//        series2.getData().add(new XYChart.Data("australia", 57401.85));
-//        series2.getData().add(new XYChart.Data("brazil", 41941.19));
-//        series2.getData().add(new XYChart.Data("France", 45263.37));
-//        series2.getData().add(new XYChart.Data("Italy", 117320.16));
-//        series2.getData().add(new XYChart.Data("USA", 14845.27));
-//
 

@@ -1,7 +1,5 @@
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.collections.FXCollections;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -9,8 +7,7 @@ import javafx.stage.FileChooser;
 import java.awt.*;
 import java.io.*;
 import java.sql.SQLSyntaxErrorException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class Data {
@@ -88,6 +85,32 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
+    public String createData(){
+
+        Collections.sort(parsedGrades, Collections.reverseOrder());
+        String join = "";
+        int counter = 0;
+
+        for(int i = 0; i < parsedGrades.size(); i++){
+            join = join + " " + getParsedGrades().get(i);
+            counter++;
+
+            if (counter == 4){
+                join = join + System.lineSeparator();
+                counter = 0;
+            }
+        }
+
+        return join;
+
+    }
+
+//
+//    public BarChart distributionChart(){
+//
+//    }
+
+
     public BarChart createBarChart() {
 
         int A = 0;
@@ -96,15 +119,20 @@ public class Data {
         int D = 0;
         int F = 0;
 
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final BarChart<String, Number> bc =
-                new BarChart<String, Number>(xAxis, yAxis);
+        final NumberAxis xAxis = new NumberAxis();
+        final CategoryAxis yAxis = new CategoryAxis();
+
+        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
+
+
+        xAxis.setTickLabelRotation(90);
+
         bc.setTitle("Grade Summary");
         xAxis.setLabel("Grade");
         yAxis.setLabel("Score");
 
         XYChart.Series series1 = new XYChart.Series();
+
         series1.setName("Amount of Each Grade");
 
         System.out.println("here");
@@ -129,13 +157,14 @@ public class Data {
                 F++;
             }
         }
-        series1.getData().add(new XYChart.Data("A", A));
-        series1.getData().add(new XYChart.Data("B", B));
 
-        series1.getData().add(new XYChart.Data("C", C));
+        series1.getData().add(new XYChart.Data(A, "A"));
+        series1.getData().add(new XYChart.Data(B, "B"));
 
-        series1.getData().add(new XYChart.Data("D", D));
-        series1.getData().add(new XYChart.Data("F", F));
+        series1.getData().add(new XYChart.Data(C,"C"));
+
+        series1.getData().add(new XYChart.Data(D,"D"));
+        series1.getData().add(new XYChart.Data(F,"F"));
 
 
         bc.getData().addAll(series1);
@@ -251,3 +280,4 @@ public class Data {
         }
     }
 }
+

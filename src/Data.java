@@ -290,7 +290,7 @@ public class Data {
         interactionHistory.add(interaction);
     }
 
-    private void addFullEntry(String entry) {
+    public void addFullEntry(String entry) {
         entries.add(entry);
         try {
             parsedGrades.add(parseEntry(entry));

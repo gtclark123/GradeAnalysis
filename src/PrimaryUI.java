@@ -109,11 +109,13 @@ public class PrimaryUI {
 
         tabPane.getTabs().add(enterDataTab);
         HBox enterBox = new HBox(10);
-        TextArea enterTextArea = new TextArea("");
+        enterBox.setPadding(new Insets(10,10,10,10));
+        TextField enterTextArea = new TextField("");
         Button enterButton = new Button("Enter Data");
 
         enterButton.setOnAction(event -> {
-            data.addManualEntry(enterTextArea.getText().toString());
+            data.addFullEntry(enterTextArea.getText());
+            enterTextArea.setText("");
         });
 
         enterBox.getChildren().addAll(

@@ -7,8 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-/***
+/***A
  * @author Shannon
  */
 public class AnalysisView extends View {
@@ -28,7 +29,6 @@ public class AnalysisView extends View {
     }
 
     private HBox h(Node ...nodes) { return new HBox(nodes); }
-
     @Override
     public Node createView() {;
         viewContainer = new VBox();
@@ -40,6 +40,7 @@ public class AnalysisView extends View {
         median = new Label();
         mode = new Label();
         viewContainer.getChildren().addAll(
+
                 noData = new Label("No data has been loaded"),
                 calculations = new VBox(
                     h(new Label("Entry Count:\t"), entryCount),
@@ -49,6 +50,7 @@ public class AnalysisView extends View {
                     h(new Label("Median:\t"), median),
                     h(new Label("Mode:\t"), mode)
                 )
+
         );
 
         return viewContainer;
@@ -57,6 +59,7 @@ public class AnalysisView extends View {
     private void updateAnalysisText() {
 
         ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
+        Collections.sort(gradesList);
 
         if (gradesList.isEmpty()) {
             calculations.setVisible(false);
@@ -69,8 +72,8 @@ public class AnalysisView extends View {
         entryCount.setText(Integer.toString(data.getAllEntries().size()));
 
         float total = 0;
-        float min = 100;
-        float max = 0;
+        float min = gradesList.get(0);
+        float max = gradesList.get(0);
         float maxValue = 0;
         int maxCount = 0;
         int middle = 0;
@@ -95,6 +98,12 @@ public class AnalysisView extends View {
                     count++;
                 }
             }
+                if (count > maxCount) {
+                    maxCount = count;
+                    maxValue = gradesList.get(i);
+                    System.out.println(maxValue);
+                }
+
             if (count > maxCount) {
                 maxCount = count;
                 maxValue = gradesList.get(i);
@@ -107,7 +116,8 @@ public class AnalysisView extends View {
             }
 
             else{
-                med = (data.getParsedGrades().get(middle-1) + data.getParsedGrades().get(middle))/2;
+                middle = middle - 1;
+                med = gradesList.get(middle);
             }
 
         }
@@ -120,12 +130,19 @@ public class AnalysisView extends View {
 
     }
 
+    public void onDismount(){
+        updateAnalysisText();
 
-    public void onDismount(){}
+    }
 
     @Override
-    public void onMount() { updateAnalysisText(); }
+    public void onMount() {
+        updateAnalysisText();
+    }
 
     @Override
-    public void onDataUpdate() { updateAnalysisText(); }
+    public void onDataUpdate() {
+        updateAnalysisText();
+    }
 }
+

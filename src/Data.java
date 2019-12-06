@@ -105,7 +105,6 @@ public class Data {
 
     }
 
-//
     public BarChart distributionChart(){
         float A = 0;
         int aCount = 0;
@@ -140,23 +139,23 @@ public class Data {
         System.out.println(parsedGrades.size());
 
         for (int i = 0; i < parsedGrades.size(); i++) {
-            if (getParsedGrades().get(i) >= 90 && getParsedGrades().get(i) <= 100) {
+            if (parsedGrades.get(i) >= 90 && parsedGrades.get(i) <= 100) {
                 A += getParsedGrades().get(i);
                 aCount++;
             }
-            if (getParsedGrades().get(i) >= 80 && getParsedGrades().get(i) < 90) {
+            if (parsedGrades.get(i) >= 80 && parsedGrades.get(i) < 90) {
                 B += getParsedGrades().get(i);
                 bCount++;
             }
-            if (getParsedGrades().get(i) >= 70 && getParsedGrades().get(i) < 80) {
+            if (parsedGrades.get(i) >= 70 && parsedGrades.get(i) < 80) {
                 C += getParsedGrades().get(i);
                 cCount++;
             }
-            if (getParsedGrades().get(i) >= 60 && getParsedGrades().get(i) < 70) {
+            if (parsedGrades.get(i) >= 60 && parsedGrades.get(i) < 70) {
                 D += getParsedGrades().get(i);
                 dCount++;
             }
-            if (getParsedGrades().get(i) < 60) {
+            if (parsedGrades.get(i) < 60) {
                 F += getParsedGrades().get(i);
                 fCount++;
             }
@@ -208,20 +207,20 @@ public class Data {
         System.out.println(parsedGrades.size());
 
         for (int i = 0; i < parsedGrades.size(); i++) {
-            if (getParsedGrades().get(i) >= 90 && getParsedGrades().get(i) <= 100) {
+            if (parsedGrades.get(i) >= 90 && parsedGrades.get(i) <= 100) {
                 A++;
             }
-            if (getParsedGrades().get(i) >= 80 && getParsedGrades().get(i) < 90) {
+            if (parsedGrades.get(i) >= 80 && parsedGrades.get(i) < 90) {
                 B++;
 
             }
-            if (getParsedGrades().get(i) >= 70 && getParsedGrades().get(i) < 80) {
+            if (parsedGrades.get(i) >= 70 && parsedGrades.get(i) < 80) {
                 C++;
             }
-            if (getParsedGrades().get(i) >= 60 && getParsedGrades().get(i) < 70) {
+            if (parsedGrades.get(i) >= 60 && parsedGrades.get(i) < 70) {
                 D++;
             }
-            if (getParsedGrades().get(i) < 60) {
+            if (parsedGrades.get(i) < 60) {
                 F++;
             }
         }

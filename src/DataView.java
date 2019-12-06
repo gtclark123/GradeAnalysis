@@ -32,7 +32,7 @@ public class DataView extends View {
 
         ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
 
-        Collections.sort(gradesList);
+        Collections.sort(gradesList,Collections.reverseOrder());
         String join = "";
         int counter = 0;
 

@@ -106,18 +106,86 @@ public class Data {
     }
 
 //
-//    public BarChart distributionChart(){
-//
-//    }
+    public BarChart distributionChart(){
+        float A = 0;
+        int aCount = 0;
+        float B = 0;
+        int bCount = 0;
+        float C = 0;
+        int cCount = 0;
+        float D = 0;
+        int dCount = 0;
+        float F = 0;
+        int fCount = 0;
+
+
+        final NumberAxis xAxis = new NumberAxis();
+        final CategoryAxis yAxis = new CategoryAxis();
+
+        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
+
+
+        xAxis.setTickLabelRotation(90);
+
+        bc.setTitle("Grade Summary");
+        xAxis.setLabel("Grade");
+        yAxis.setLabel("Score");
+
+        XYChart.Series series1 = new XYChart.Series();
+
+        series1.setName("Amount of Each Grade");
+
+        System.out.println("here");
+
+        System.out.println(parsedGrades.size());
+
+        for (int i = 0; i < parsedGrades.size(); i++) {
+            if (getParsedGrades().get(i) >= 90 && getParsedGrades().get(i) <= 100) {
+                A += getParsedGrades().get(i);
+                aCount++;
+            }
+            if (getParsedGrades().get(i) >= 80 && getParsedGrades().get(i) < 90) {
+                B += getParsedGrades().get(i);
+                bCount++;
+            }
+            if (getParsedGrades().get(i) >= 70 && getParsedGrades().get(i) < 80) {
+                C += getParsedGrades().get(i);
+                cCount++;
+            }
+            if (getParsedGrades().get(i) >= 60 && getParsedGrades().get(i) < 70) {
+                D += getParsedGrades().get(i);
+                dCount++;
+            }
+            if (getParsedGrades().get(i) < 60) {
+                F += getParsedGrades().get(i);
+                fCount++;
+            }
+        }
+
+        series1.getData().add(new XYChart.Data(A/aCount, "A"));
+        series1.getData().add(new XYChart.Data(B/bCount, "B"));
+
+        series1.getData().add(new XYChart.Data(C/cCount,"C"));
+
+        series1.getData().add(new XYChart.Data(D/dCount,"D"));
+        series1.getData().add(new XYChart.Data(F/fCount,"F"));
+
+
+        bc.getData().addAll(series1);
+
+
+        return bc;
+
+    }
 
 
     public BarChart createBarChart() {
 
-        int A = 0;
-        int B = 0;
-        int C = 0;
-        int D = 0;
-        int F = 0;
+        float A = 0;
+        float B = 0;
+        float C = 0;
+        float D = 0;
+        float F = 0;
 
         final NumberAxis xAxis = new NumberAxis();
         final CategoryAxis yAxis = new CategoryAxis();

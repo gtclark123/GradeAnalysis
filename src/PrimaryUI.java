@@ -167,13 +167,20 @@ public class PrimaryUI {
         Tab createDistributionTab = new Tab("Distribution");
         createDistributionTab.setClosable(false);
 
-        Button createDistributionButton = new Button();
+        Button createDistributionButton = new Button("Create Distribution");
+
         createDistributionButton.setOnAction(event -> {
             createDistributionTab.setContent(data.distributionChart());
         });
 
+        graphTab.setContent(createDistributionButton);
+
+        createDistributionTab.setOnSelectionChanged(event -> {
+            createDistributionTab.setContent(createDistributionButton);
+        });
 
         tabPane.getTabs().add(graphTab);
+        tabPane.getTabs().add(createDistributionTab);
 
 
         //Create error log Tab

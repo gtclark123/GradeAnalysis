@@ -31,7 +31,7 @@ public class DataView extends View {
 
         ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
 
-        Collections.sort(gradesList);
+        Collections.sort(gradesList,Collections.reverseOrder());
         String join = "";
         int counter = 0;
 

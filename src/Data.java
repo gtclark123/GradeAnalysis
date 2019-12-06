@@ -12,6 +12,7 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Data {
     public interface EventDispatcher {
@@ -87,6 +88,83 @@ public class Data {
         interactionHistory = new ArrayList<>();
         this.dispatcher = dispatcher;
     }
+
+    public String createData(){
+
+        Collections.sort(parsedGrades, Collections.reverseOrder());
+        String join = "";
+        int counter = 0;
+
+        for(int i = 0; i < parsedGrades.size(); i++){
+                join = join + " " + getParsedGrades().get(i);
+                counter++;
+
+                if (counter == 4){
+                    join = join + System.lineSeparator();
+                    counter = 0;
+                }
+        }
+
+        return join;
+
+    }
+
+    public String analysis(){
+
+        String analysis = "";
+        //int count = 0;
+        //int count1 = 0;
+        //float min = 100;
+        //float max = 0;
+        //float total = 0;
+        //float mean = 0;
+        //float mode = 0;
+        //float maxValue = 0;
+        //int maxCount = 0;
+        //float median = 0;
+        //float mediannumber = 0;
+
+
+        //for(int i = 0; i < parsedGrades.size(); i++){
+          //  count++;
+
+            //total = total + parsedGrades.get(i);
+
+            //if(parsedGrades.get(i) > max){
+              //  max = parsedGrades.get(i);
+            //}
+            //if(parsedGrades.get(i) < min){
+              //  min = parsedGrades.get(i);
+            //}
+
+            //count1 = 0;
+            //for (int j = 0; j < parsedGrades.size(); ++j) {
+              //  if (parsedGrades.get(j) == parsedGrades.get(i)) ++count1;
+            //}
+            //if (count > maxCount) {
+              //  maxCount = count1;
+                //maxValue = parsedGrades.get(i);
+            //}
+
+        //}
+
+        //mean = (float)(total/count);
+        //mediannumber = total/2;
+        //median = parsedGrades.get((int)mediannumber);
+        //mode = maxValue;
+
+       // analysis = "Number of Entries: " + total + "\n" +
+         //           "High: " + max + "\n" +
+        //            "Low: " + min + "\n" +
+         //           "Mean: " + mean + "\n" +
+          //          "Median: " + median + "\n" +
+          //          "Mode: " + mode + "\n";
+
+        analysis = "test";
+        return analysis;
+
+    }
+
 
     public BarChart createBarChart() {
 

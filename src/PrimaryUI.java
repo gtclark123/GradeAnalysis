@@ -1,4 +1,3 @@
-import com.sun.tools.doclets.internal.toolkit.Content;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -104,11 +103,26 @@ public class PrimaryUI {
             tabPane.getTabs().add(viewTab);
         }
 
-        Tab moreViewsTab = new Tab("<Add more views to ViewFactor>");
-        moreViewsTab.setClosable(false);
+        Tab enterDataTab = new Tab("Enter Data");
+        enterDataTab.setClosable(false);
 
 
-        tabPane.getTabs().add(moreViewsTab);
+        tabPane.getTabs().add(enterDataTab);
+        HBox enterBox = new HBox(10);
+        TextArea enterTextArea = new TextArea("");
+        Button enterButton = new Button("Enter Data");
+
+        enterButton.setOnAction(event -> {
+            data.addManualEntry(enterTextArea.getText().toString());
+        });
+
+        enterBox.getChildren().addAll(
+          new Label("Enter Data Here:"),
+          enterTextArea,
+            enterButton
+        );
+
+        enterDataTab.setContent(enterBox);
 
         //Create delete Tab
         Tab deleteTab = new Tab("Delete");
@@ -150,6 +164,32 @@ public class PrimaryUI {
         graphTab.setContent(createGraphButton);
 
         tabPane.getTabs().add(graphTab);
+
+        //Create error log Tab
+        Tab errorTab = new Tab("Error Log");
+        errorTab.setClosable(false);
+
+        //add to tabPane
+        tabPane.getTabs().add(errorTab);
+
+        //Create analysis Tab
+        Tab analysisTab = new Tab("Analysis");
+        analysisTab.setClosable(false);
+
+       HBox analysisBox = new HBox(10);
+        TextArea text = new TextArea();
+        text.setEditable(false);
+        analysisBox.getChildren().addAll(
+                new Label("Analysis"),
+                text
+        );
+
+        analysisTab.setContent(analysisBox);
+
+        //add to tabPane
+        tabPane.getTabs().add(analysisTab);
+
+
 
         tabPane.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldIndex, newIndex) -> {

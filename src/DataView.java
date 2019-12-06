@@ -1,4 +1,7 @@
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
@@ -14,8 +17,6 @@ public class DataView extends View {
     public Node createView() {
         //box.getChildren().add();
         viewContainer = new VBox(new Label("Data View"));
-//        data.addManualEntry(...);
-
         return viewContainer;
     }
 
@@ -36,6 +37,9 @@ public class DataView extends View {
     public void onDataUpdate() {
         // for data.getAllEntries() ...
         // update columns?
-        viewContainer.getChildren().add(new Label("data was updated!"));
+        TextArea text = new TextArea(data.createData());
+        text.setEditable(false);
+
+        viewContainer.getChildren().addAll(new Label("data was updated!"), text);
     }
 }

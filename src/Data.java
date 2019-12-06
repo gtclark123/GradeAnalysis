@@ -114,7 +114,7 @@ public class Data {
         int counter = 0;
 
         for(int i = 0; i < parsedGrades.size(); i++){
-                join = join + " " + getParsedGrades().get(i) + i;
+                join = join + " " + getParsedGrades().get(i);
                 counter++;
 
                 if (counter == 4){

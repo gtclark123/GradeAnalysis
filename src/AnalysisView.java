@@ -5,6 +5,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
+import java.util.ArrayList;
+
 public class AnalysisView extends View {
 
     VBox viewContainer;
@@ -43,6 +45,8 @@ public class AnalysisView extends View {
 
     private void updateAnalysisText() {
 
+        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
+
         entryCount.setText(Integer.toString(data.getAllEntries().size()));
 
         float total = 0;
@@ -54,32 +58,33 @@ public class AnalysisView extends View {
         int entries = 0;
         float med = 0;
 
-        entries = data.getParsedGrades().size();
+        entries = gradesList.size();
 
-        for(int i = 0; i < data.getParsedGrades().size(); i++) {
-            total = total + data.getParsedGrades().get(i);
+        for(int i = 0; i < gradesList.size(); i++) {
+            total = total + gradesList.get(i);
 
-            if(max < data.getParsedGrades().get(i)){
-                max = data.getParsedGrades().get(i);
+            if(max < gradesList.get(i)){
+                max = gradesList.get(i);
             }
-            if(min > data.getParsedGrades().get(i)){
-                min = data.getParsedGrades().get(i);
+            if(min > gradesList.get(i)){
+                min = gradesList.get(i);
             }
 
             int count = 0;
-            for (int j = 0; j < data.getParsedGrades().size(); j++) {
-                if (data.getParsedGrades().get(j) == data.getParsedGrades().get(i)) {
+            for (int j = 0; j < gradesList.size(); j++) {
+                if ((gradesList.get(j) - gradesList.get(i)) == 0) {
                     count++;
                 }
             }
                 if (count > maxCount) {
                     maxCount = count;
-                    maxValue = data.getParsedGrades().get(i);
+                    maxValue = gradesList.get(i);
+                    System.out.println(maxValue);
                 }
 
             middle = entries/2;
             if(entries%2 == 1){
-                med = data.getParsedGrades().get(middle);
+                med = gradesList.get(middle);
             }
 
             else{

@@ -103,27 +103,6 @@ public class PrimaryUI {
             tabPane.getTabs().add(viewTab);
         }
 
-        Tab enterDataTab = new Tab("Enter Data");
-        enterDataTab.setClosable(false);
-
-
-        tabPane.getTabs().add(enterDataTab);
-        HBox enterBox = new HBox(10);
-        TextArea enterTextArea = new TextArea("");
-        Button enterButton = new Button("Enter Data");
-
-        enterButton.setOnAction(event -> {
-            data.addManualEntry(enterTextArea.getText().toString());
-        });
-
-        enterBox.getChildren().addAll(
-          new Label("Enter Data Here:"),
-          enterTextArea,
-            enterButton
-        );
-
-        enterDataTab.setContent(enterBox);
-
         //Create delete Tab
         Tab deleteTab = new Tab("Delete");
         deleteTab.setClosable(false);

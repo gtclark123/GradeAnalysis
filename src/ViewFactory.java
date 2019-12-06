@@ -4,7 +4,8 @@ public class ViewFactory {
         return new View[]{
             new DataView(data),
             new AnalysisView(data),
-            new ErrorView(data)
+            new ErrorView(data),
+            new KeyboardView(data)
             // OtherView(data)
             // add a new view here...
         };

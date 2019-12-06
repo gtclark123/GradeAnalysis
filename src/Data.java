@@ -89,6 +89,24 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
+    public String analysis(){
+
+        String analysis = "";
+        int count = 0;
+
+        for(int i = 0; i < parsedGrades.size(); i++){
+
+            count++;
+
+        }
+
+        analysis = "Number of Entries: " + count + "\n";
+
+        analysis = analysis + "test";
+        return analysis;
+
+    }
+
     public String createData(){
 
         Collections.sort(parsedGrades, Collections.reverseOrder());
@@ -96,11 +114,11 @@ public class Data {
         int counter = 0;
 
         for(int i = 0; i < parsedGrades.size(); i++){
-                join = join + " " + getParsedGrades().get(i);
+                join = join + " " + getParsedGrades().get(i) + i;
                 counter++;
 
                 if (counter == 4){
-                    join = join + System.lineSeparator();
+                    join = join + System.lineSeparator() ;
                     counter = 0;
                 }
         }
@@ -109,59 +127,17 @@ public class Data {
 
     }
 
-    public String analysis(){
+    public String errorLog(){
 
-        String analysis = "";
-        //int count = 0;
-        //int count1 = 0;
-        //float min = 100;
-        //float max = 0;
-        //float total = 0;
-        //float mean = 0;
-        //float mode = 0;
-        //float maxValue = 0;
-        //int maxCount = 0;
-        //float median = 0;
-        //float mediannumber = 0;
+        String error = "hi";
 
+        //for(int i = 0; errorHistory.get(i)!= null; i++){
 
-        //for(int i = 0; i < parsedGrades.size(); i++){
-          //  count++;
-
-            //total = total + parsedGrades.get(i);
-
-            //if(parsedGrades.get(i) > max){
-              //  max = parsedGrades.get(i);
-            //}
-            //if(parsedGrades.get(i) < min){
-              //  min = parsedGrades.get(i);
-            //}
-
-            //count1 = 0;
-            //for (int j = 0; j < parsedGrades.size(); ++j) {
-              //  if (parsedGrades.get(j) == parsedGrades.get(i)) ++count1;
-            //}
-            //if (count > maxCount) {
-              //  maxCount = count1;
-                //maxValue = parsedGrades.get(i);
-            //}
+       // error = error + errorHistory.get(i) + "\n";
 
         //}
 
-        //mean = (float)(total/count);
-        //mediannumber = total/2;
-        //median = parsedGrades.get((int)mediannumber);
-        //mode = maxValue;
-
-       // analysis = "Number of Entries: " + total + "\n" +
-         //           "High: " + max + "\n" +
-        //            "Low: " + min + "\n" +
-         //           "Mean: " + mean + "\n" +
-          //          "Median: " + median + "\n" +
-          //          "Mode: " + mode + "\n";
-
-        analysis = "test";
-        return analysis;
+        return error;
 
     }
 

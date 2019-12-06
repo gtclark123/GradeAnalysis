@@ -89,59 +89,6 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
-    public String analysis(){
-
-        String analysis = "";
-        int count = 0;
-
-        for(int i = 0; i < parsedGrades.size(); i++){
-
-            count++;
-
-        }
-
-        analysis = "Number of Entries: " + count + "\n";
-
-        analysis = analysis + "test";
-        return analysis;
-
-    }
-
-    public String createData(){
-
-        Collections.sort(parsedGrades, Collections.reverseOrder());
-        String join = "";
-        int counter = 0;
-
-        for(int i = 0; i < parsedGrades.size(); i++){
-                join = join + " " + getParsedGrades().get(i);
-                counter++;
-
-                if (counter == 4){
-                    join = join + System.lineSeparator() ;
-                    counter = 0;
-                }
-        }
-
-        return join;
-
-    }
-
-    public String errorLog(){
-
-        String error = "hi";
-
-        //for(int i = 0; errorHistory.get(i)!= null; i++){
-
-       // error = error + errorHistory.get(i) + "\n";
-
-        //}
-
-        return error;
-
-    }
-
-
     public BarChart createBarChart() {
 
         int A = 0;
@@ -280,7 +227,6 @@ public class Data {
         }
 
         return num;
-
     }
 
     private void parseFile(String filePath) {

@@ -8,52 +8,36 @@ import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class DataView extends View {
+public class ErrorView extends View {
 
     VBox viewContainer;
-    Label column;
+    Label error;
 
-    public DataView(Data data) {
-        super(data, "Data");
+    public ErrorView(Data data) {
+        super(data, "Error");
     }
 
     @Override
     public Node createView() {
         //box.getChildren().add();
-        viewContainer = new VBox(new Label("Data View"));
+        viewContainer = new VBox(new Label("Error View"));
 
-        column = new Label();
-        viewContainer.getChildren().add(column);
+        error = new Label();
+        viewContainer.getChildren().add(error);
 
         return viewContainer;
     }
 
-    private void updateDataText(){
+    private void updateErrorText(){
 
-        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
-
-        Collections.sort(gradesList);
-        String join = "";
-        int counter = 0;
-
-        for(int i = 0; i < gradesList.size(); i++){
-            join = join + " " + gradesList.get(i);
-            counter++;
-
-            if (counter == 4){
-                join = join + System.lineSeparator() ;
-                counter = 0;
-            }
-        }
-
-        column.setText(join);
-
+        error.setText(data.getErrors().toString());
+        error.setText("test");
     }
 
     @Override
     public void onMount() {
         // mounted ...
-        updateDataText();
+        updateErrorText();
         viewContainer.getChildren().add(new Label("mounted on to view"));
     }
 
@@ -61,7 +45,7 @@ public class DataView extends View {
     public void onDismount() {
         // do something if necessary
         // data.removeXYZ
-        updateDataText();
+        updateErrorText();
         viewContainer.getChildren().add(new Label("removed from view"));
     }
 
@@ -69,7 +53,7 @@ public class DataView extends View {
     public void onDataUpdate() {
         // for data.getAllEntries() ...
         // update columns?
-        updateDataText();
+        updateErrorText();
 
         viewContainer.getChildren().addAll(new Label("data was updated!"));
     }

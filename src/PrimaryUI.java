@@ -165,32 +165,6 @@ public class PrimaryUI {
 
         tabPane.getTabs().add(graphTab);
 
-        //Create error log Tab
-        Tab errorTab = new Tab("Error Log");
-        errorTab.setClosable(false);
-
-        //add to tabPane
-        tabPane.getTabs().add(errorTab);
-
-        //Create analysis Tab
-        Tab analysisTab = new Tab("Analysis");
-        analysisTab.setClosable(false);
-
-       HBox analysisBox = new HBox(10);
-        TextArea text = new TextArea();
-        text.setEditable(false);
-        analysisBox.getChildren().addAll(
-                new Label("Analysis"),
-                text
-        );
-
-        analysisTab.setContent(analysisBox);
-
-        //add to tabPane
-        tabPane.getTabs().add(analysisTab);
-
-
-
         tabPane.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldIndex, newIndex) -> {
                     if (activeView != null) activeView.onDismount();

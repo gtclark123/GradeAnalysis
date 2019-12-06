@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AnalysisView extends View {
 
@@ -46,12 +47,13 @@ public class AnalysisView extends View {
     private void updateAnalysisText() {
 
         ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
+        Collections.sort(gradesList);
 
         entryCount.setText(Integer.toString(data.getAllEntries().size()));
 
         float total = 0;
-        float min = 100;
-        float max = 0;
+        float min = gradesList.get(0);
+        float max = gradesList.get(0);
         float maxValue = 0;
         int maxCount = 0;
         int middle = 0;
@@ -88,7 +90,7 @@ public class AnalysisView extends View {
             }
 
             else{
-                med = (data.getParsedGrades().get(middle-1) + data.getParsedGrades().get(middle))/2;
+                med = (gradesList.get(middle-1) + gradesList.get(middle))/2;
             }
 
         }

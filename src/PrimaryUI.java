@@ -144,12 +144,20 @@ public class PrimaryUI {
             graphTab.setContent(data.createBarChart());
         });
 
-
-
-
         graphTab.setContent(createGraphButton);
 
+        graphTab.setOnSelectionChanged(event -> {
+            graphTab.setContent(createGraphButton);
+        });
+
+        Tab errorLogTab = new Tab("Error Log");
+        errorLogTab.setClosable(false);
+
+
+
         tabPane.getTabs().add(graphTab);
+        tabPane.getTabs().add(errorLogTab);
+
 
         tabPane.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldIndex, newIndex) -> {

@@ -60,8 +60,10 @@ public class Data {
         private void parseEntry(String entry) {
             try {
                 parsedGrade = Float.parseFloat(entry);
+                interactionHistory.add("Entry " + parsedGrade + " was added. ");
             } catch (NumberFormatException e) {
                 addErrorToStack(ErrorType.NAN, entry + " is not valid float value.");
+                interactionHistory.add(entry + " is not a valid float value.");
                 isNumber = false;
             }
         }
@@ -131,17 +133,32 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
-    public void deleteEntry(int deleteID) {
-        if (entryList.removeIf(x->x.id==deleteID)) dispatcher.dataUpdated(this);
+    public void deleteEntry(int deleteID)
+    {
+        if (entryList.removeIf(x->x.id==deleteID))
+        {
+            dispatcher.dataUpdated(this);
+            interactionHistory.add(deleteID + " was succesfully removed");
+        }
     }
 
-    public void deleteEntry(Entry deletedEntry) {
-        if (entryList.remove(deletedEntry)) dispatcher.dataUpdated(this);
+    public void deleteEntry(Entry deletedEntry)
+    {
+        if (entryList.remove(deletedEntry))
+        {
+            dispatcher.dataUpdated(this);
+            interactionHistory.add(deletedEntry + " was succesfully removed");
+        }
     }
 
     // Last resort...
-    public void deleteEntry(String deleteString) {
-        if (entryList.removeIf(x->x.entry == deleteString)) dispatcher.dataUpdated(this);
+    public void deleteEntry(String deleteString)
+    {
+        if (entryList.removeIf(x->x.entry == deleteString))
+        {
+            dispatcher.dataUpdated(this);
+            interactionHistory.add(deleteString + " was succesfully removed");
+        }
     }
 
     public BarChart distributionChart(){
@@ -230,19 +247,30 @@ public class Data {
         clearSession();
         // open file and pass in path
 
-        if (parseFile(fileName)) dispatcher.dataUpdated(this);
+        if (parseFile(fileName))
+        {
+            dispatcher.dataUpdated(this);
+            interactionHistory.add(fileName + " was succesfully loaded.");
+        }
     }
 
     // Opens a file-browser, gets file contents and appens
     public void openAppendFile(String fileName) {
         // open file and parse
-        if (parseFile(fileName)) dispatcher.dataUpdated(this);
+        if (parseFile(fileName))
+        {
+            dispatcher.dataUpdated(this);
+            interactionHistory.add(fileName + " was succesfully appended.");
+        }
     }
 
     // open a file and write a report ...
 
-    public void writeReportToFile() {
+    public void writeReportToFile()
+    {
         System.out.println("Writing export?");
+        ReportMaker reportMaker = new ReportMaker(interactionHistory);
+        //reportMaker.writeReport();
     }
 
     public void addManualEntry(String entry) {
@@ -294,6 +322,7 @@ public class Data {
         entry = entry.trim();
         if (!entry.isEmpty()) {
             entryList.add(new Entry(entry));
+            interactionHistory.add(entry + " was succesfully added.");
         }
     }
 

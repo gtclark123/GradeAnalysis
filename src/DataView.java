@@ -1,17 +1,14 @@
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class DataView extends View {
 
-    VBox viewContainer;
-    Label column;
+    HBox viewContainer;
 
     public DataView(Data data) {
         super(data, "Data");
@@ -19,61 +16,43 @@ public class DataView extends View {
 
     @Override
     public Node createView() {
-        viewContainer = new VBox();
-
-        column = new Label();
-        viewContainer.getChildren().add(column);
+        viewContainer = new HBox();
 
         return viewContainer;
     }
 
     private void updateDataText(){
 
-        ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
+        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
 
-        Collections.sort(gradesList, Collections.reverseOrder());
-        String join = "";
-        int counter = 0;
-        int count = 0;
-        int size = gradesList.size();
-        int amount = size/4;
-        int rem = size%4;
-        int num = 0;
+        Collections.sort(gradesList);
+        Collections.reverse(gradesList);
 
-        //add another row if the remainder isn't 0
-        if(rem != 0){
-            num = amount + 1;
-        }
+        int maxLen = (int) Math.floor((float)gradesList.size() / 4f);
+        maxLen = Math.max(maxLen, 1);
 
-        for(int i = 0; i < num; i++){
-            counter = count;
+        viewContainer.getChildren().clear();
 
+        int remainder = gradesList.size() > 4? gradesList.size() % 4 : 0;
+        System.out.println(remainder);
 
-            if((rem !=0) && ((i+1) == num)){
+        int index = 0;
+        for(int i = 0; i < 4; i ++ ) {
+            VBox col = new VBox();
+            viewContainer.getChildren().add(col);
 
-                for(int k = 0; k < rem; k++){
+            int shift = ((remainder > 0)? Math.min(1, remainder) : 0);
+            if (remainder>0) remainder --;
 
-                    join = join + gradesList.get(counter) + " ";
-                    counter = counter + amount;
-                }
-
-            }
-
-            else {
-                for (int j = 0; j < 4; j++) {
-                    join = join + gradesList.get(counter) + " ";
-                    counter = counter + amount;
-                }
-                count++;
-                join += "\n";
+            for(int j = 0;
+                    j < maxLen + shift
+                    && index < gradesList.size(); j ++) {
+                col.getChildren().add(
+                  new Label(gradesList.get(index) + "," )
+                );
+                index ++;
             }
         }
-
-        if (gradesList.isEmpty()) {
-            join = "No data has been entered.";
-        }
-
-        column.setText(join);
 
     }
 

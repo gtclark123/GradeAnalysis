@@ -78,11 +78,13 @@ public class PrimaryUI {
         });
 
 
-
-//        Button buttonAppend = new Button("Append");
-
+        FileChooser exportFileChooser = new FileChooser();
+        exportFileChooser.setTitle("Export Report");
         Button buttonExportReport = new Button("Export Report");
-        buttonExportReport.setOnAction(ev -> data.writeReportToFile());
+        buttonExportReport.setOnAction(ev -> {
+            File appendSelectedFile = exportFileChooser.showSaveDialog(primaryStage);
+            data.writeReportToFile(appendSelectedFile.toString());
+        });
 
 
         // File toolbar
@@ -142,8 +144,6 @@ public class PrimaryUI {
 
         deleteButton.setOnAction(event -> {
             data.deleteEntry(deleteTextField.getText());
-            data.getParsedGrades().forEach(System.out::println);
-
         });
         deleteBox.getChildren().addAll(new Label("Enter a number to delete "),deleteTextField, deleteButton);
 
@@ -174,6 +174,7 @@ public class PrimaryUI {
             if (newIndex.intValue() < views.length && newIndex.intValue() >= 0) {
                 this.activeView = views[newIndex.intValue()];
                 activeView.onMount();
+                data.addUIInteraction("Switched to tab: " + activeView.viewName);
             }
         });
 

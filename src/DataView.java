@@ -1,17 +1,14 @@
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class DataView extends View {
 
-    VBox viewContainer;
-    Label column;
+    HBox viewContainer;
 
     public DataView(Data data) {
         super(data, "Data");
@@ -19,37 +16,43 @@ public class DataView extends View {
 
     @Override
     public Node createView() {
-        viewContainer = new VBox();
-
-        column = new Label();
-        viewContainer.getChildren().add(column);
+        viewContainer = new HBox();
 
         return viewContainer;
     }
 
     private void updateDataText(){
 
-        ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
+        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
 
         Collections.sort(gradesList);
-        String join = "";
-        int counter = 0;
+        Collections.reverse(gradesList);
 
-        for(int i = 0; i < gradesList.size(); i++){
-            join = join + " " + gradesList.get(i);
-            counter++;
+        int maxLen = (int) Math.floor((float)gradesList.size() / 4f);
+        maxLen = Math.max(maxLen, 1);
 
-            if (counter == 4){
-                join = join + System.lineSeparator() ;
-                counter = 0;
+        viewContainer.getChildren().clear();
+
+        int remainder = gradesList.size() > 4? gradesList.size() % 4 : 0;
+        System.out.println(remainder);
+
+        int index = 0;
+        for(int i = 0; i < 4; i ++ ) {
+            VBox col = new VBox();
+            viewContainer.getChildren().add(col);
+
+            int shift = ((remainder > 0)? Math.min(1, remainder) : 0);
+            if (remainder>0) remainder --;
+
+            for(int j = 0;
+                    j < maxLen + shift
+                    && index < gradesList.size(); j ++) {
+                col.getChildren().add(
+                  new Label(gradesList.get(index) + "," )
+                );
+                index ++;
             }
         }
-
-        if (gradesList.isEmpty()) {
-            join = "No data has been entered.";
-        }
-
-        column.setText(join);
 
     }
 

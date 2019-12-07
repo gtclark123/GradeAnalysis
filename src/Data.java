@@ -131,17 +131,26 @@ public class Data {
         this.dispatcher = dispatcher;
     }
 
-    public void deleteEntry(int deleteID) {
-        if (entryList.removeIf(x->x.id==deleteID)) dispatcher.dataUpdated(this);
+    public void deleteEntry(Entry deletedEntry)
+    {
+        if (entryList.remove(deletedEntry)) {
+            dispatcher.dataUpdated(this);
+            addUIInteraction(deletedEntry.entry + " was successfully removed");
+        }
     }
 
-    public void deleteEntry(Entry deletedEntry) {
-        if (entryList.remove(deletedEntry)) dispatcher.dataUpdated(this);
-    }
+    public void deleteEntry(String deleteString)
+    {
+        int index = -1;
+        while(++index < entryList.size() && !entryList.get(index).entry.equals(deleteString));
 
-    // Last resort...
-    public void deleteEntry(String deleteString) {
-        if (entryList.removeIf(x->x.entry == deleteString)) dispatcher.dataUpdated(this);
+        if (index < entryList.size()) {
+            Entry e = entryList.get(index);
+            dispatcher.dataUpdated(this);
+            addUIInteraction(e.entry + " was removed");
+        } else {
+            addUIInteraction(deleteString + "was not removed.");
+        }
     }
 
     public BarChart distributionChart(){
@@ -230,22 +239,31 @@ public class Data {
         clearSession();
         // open file and pass in path
 
-        if (parseFile(fileName)) dispatcher.dataUpdated(this);
+        if (parseFile(fileName))
+        {
+            dispatcher.dataUpdated(this);
+            addUIInteraction("file: " + fileName + " was loaded.");
+        }
     }
 
     // Opens a file-browser, gets file contents and appens
     public void openAppendFile(String fileName) {
         // open file and parse
-        if (parseFile(fileName)) dispatcher.dataUpdated(this);
+        if (parseFile(fileName))
+        {
+            dispatcher.dataUpdated(this);
+            addUIInteraction("file: " + fileName + " was appended.");
+        }
     }
 
     // open a file and write a report ...
-
-    public void writeReportToFile() {
-        System.out.println("Writing export?");
+    public void writeReportToFile(String filepath) {
+        ReportMaker reportMaker = new ReportMaker(this);
+        reportMaker.writeReport(filepath);
     }
 
     public void addManualEntry(String entry) {
+        addUIInteraction(entry + " was added by hand.");
         addFullEntry(entry);
         dispatcher.dataUpdated(this);
     }
@@ -278,6 +296,8 @@ public class Data {
             addErrorToStack(ErrorType.USAGE, "Bounds shouldn't be flipped.");
         }
 
+        addUIInteraction("The bounds were updated.");
+
         minBounds = low;
         maxBounds = high;
 
@@ -298,7 +318,7 @@ public class Data {
     }
 
 
-    private void addErrorToStack(ErrorType type, String msg) { errorHistory.add(new Error(type, msg)); }
+    public void addErrorToStack(ErrorType type, String msg) { errorHistory.add(new Error(type, msg)); }
 
     private void parseCSV(BufferedReader reader) {
         try {
@@ -348,4 +368,3 @@ public class Data {
         }
     }
 }
-

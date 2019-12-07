@@ -7,8 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-/***
+/***A
  * @author Shannon
  */
 public class AnalysisView extends View {
@@ -28,7 +29,6 @@ public class AnalysisView extends View {
     }
 
     private HBox h(Node ...nodes) { return new HBox(nodes); }
-
     @Override
     public Node createView() {;
         viewContainer = new VBox();
@@ -39,16 +39,17 @@ public class AnalysisView extends View {
         mean = new Label();
         median = new Label();
         mode = new Label();
+
         viewContainer.getChildren().addAll(
-                noData = new Label("No data has been loaded"),
-                calculations = new VBox(
-                    h(new Label("Entry Count:\t"), entryCount),
-                    h(new Label("High:\t"), high),
-                    h(new Label("Low:\t"), low),
-                    h(new Label("Mean:\t"), mean),
-                    h(new Label("Median:\t"), median),
-                    h(new Label("Mode:\t"), mode)
-                )
+            noData = new Label("No data has been loaded"),
+            calculations = new VBox(
+                h(new Label("Entry Count:\t"), entryCount),
+                h(new Label("High:\t"), high),
+                h(new Label("Low:\t"), low),
+                h(new Label("Mean:\t"), mean),
+                h(new Label("Median:\t"), median),
+                h(new Label("Mode:\t"), mode)
+            )
         );
 
         return viewContainer;
@@ -57,9 +58,11 @@ public class AnalysisView extends View {
     private void updateAnalysisText() {
 
         ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
+        Collections.sort(gradesList);
 
         if (gradesList.isEmpty()) {
             calculations.setVisible(false);
+            return;
         } else {
             calculations.setVisible(true);
             noData.setManaged(false);
@@ -69,8 +72,8 @@ public class AnalysisView extends View {
         entryCount.setText(Integer.toString(data.getAllEntries().size()));
 
         float total = 0;
-        float min = 100;
-        float max = 0;
+        float min = gradesList.get(0);
+        float max = gradesList.get(0);
         float maxValue = 0;
         int maxCount = 0;
         int middle = 0;
@@ -91,7 +94,7 @@ public class AnalysisView extends View {
 
             int count = 0;
             for (int j = 0; j < gradesList.size(); j++) {
-                if ((gradesList.get(j) - gradesList.get(i)) == 0) {
+                if ( Float.compare(gradesList.get(j), gradesList.get(i)) == 0) {
                     count++;
                 }
             }
@@ -101,16 +104,19 @@ public class AnalysisView extends View {
                 System.out.println(maxValue);
             }
 
-            middle = entries/2;
-            if(entries%2 == 1){
-                med = gradesList.get(middle);
-            }
-
-            else{
-                med = (data.getParsedGrades().get(middle-1) + data.getParsedGrades().get(middle))/2;
+            if (count > maxCount) {
+                maxCount = count;
+                maxValue = gradesList.get(i);
+                System.out.println(maxValue);
             }
 
         }
+
+        middle = entries/2;
+        if (entries % 2 != 1) {
+            middle = middle - 1;
+        }
+        med = gradesList.get(middle);
 
         high.setText(Float.toString(max));
         low.setText(Float.toString(min));
@@ -120,12 +126,14 @@ public class AnalysisView extends View {
 
     }
 
-
+    @Override
     public void onDismount(){}
 
     @Override
     public void onMount() { updateAnalysisText(); }
 
     @Override
-    public void onDataUpdate() { updateAnalysisText(); }
+    public void onDataUpdate() {
+        updateAnalysisText();
+    }
 }

@@ -63,7 +63,7 @@ public class Data {
                 interactionHistory.add("Entry " + parsedGrade + " was added. ");
             } catch (NumberFormatException e) {
                 addErrorToStack(ErrorType.NAN, entry + " is not valid float value.");
-                //interactionHistory.add(entry + " is not a valid float value.");
+                interactionHistory.add("ERROR: " +entry + " is not a valid float value.");
                 isNumber = false;
             }
         }
@@ -260,7 +260,7 @@ public class Data {
         if (parseFile(fileName))
         {
             dispatcher.dataUpdated(this);
-            interactionHistory.add(fileName + " was succesfully appended.");
+            interactionHistory.add("The file [" + fileName + "] was succesfully appended.");
         }
     }
 
@@ -289,11 +289,16 @@ public class Data {
 
         } catch (Exception ignore) {
             addErrorToStack(ErrorType.USAGE, "Min bound-" + low + " is not valid.");
+            interactionHistory.add("ERROR during update bounds operation: Min bound-" + low + " is not valid.");
+
+
         }
         try {
             newHigh = Float.parseFloat(high);
         } catch (Exception ignore) {
             addErrorToStack(ErrorType.USAGE, "Max bound-" + high + " is not valid.");
+            interactionHistory.add("ERROR during update bounds operation: Max bound-" + high + " is not valid.");
+
         }
         updateBounds(newLow, newHigh);
     }
@@ -305,6 +310,8 @@ public class Data {
             low = high;
             high = temp;
             addErrorToStack(ErrorType.USAGE, "Bounds shouldn't be flipped.");
+            interactionHistory.add("ERROR during update bounds operation: User attempted to input max bound less than min bound.");
+
         }
 
         minBounds = low;
@@ -340,6 +347,8 @@ public class Data {
         }
         catch (IOException e) {
             addErrorToStack(ErrorType.IO, "Error parsing from buffer reader.");
+            interactionHistory.add("ERROR was encountered parsing from buffer reader.");
+
         }
     }
 
@@ -353,6 +362,7 @@ public class Data {
         }
         catch (IOException e) {
             addErrorToStack(ErrorType.IO, "Error parsing from buffer reader.");
+            interactionHistory.add("ERROR was encountered parsing from buffer reader.");
         }
     }
 
@@ -371,9 +381,12 @@ public class Data {
             return true;
         } catch (FileNotFoundException e) {
             addErrorToStack(ErrorType.IO, e.getMessage());
+            interactionHistory.add("ERROR was encountered: File Not Found!");
             return false;
         } catch (IOException e) {
             addErrorToStack(ErrorType.IO, e.getMessage());
+            interactionHistory.add("ERROR was encountered: Input/output error");
+
             return false;
         }
     }

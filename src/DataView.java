@@ -29,27 +29,36 @@ public class DataView extends View {
 
     private void updateDataText() {
 
-        ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
+        ArrayList<Float> gradesList = new ArrayList<>(data.getParsedGrades());
 
         Collections.sort(gradesList);
-        String join = "";
-        int counter = 0;
+        Collections.reverse(gradesList);
 
-        for (int i = 0; i < gradesList.size(); i++) {
-            join = join + " " + gradesList.get(i);
-            counter++;
+        int maxLen = (int) Math.floor((float)gradesList.size() / 4f);
+        maxLen = Math.max(maxLen, 1);
 
-            if (counter == 4) {
-                join = join + System.lineSeparator();
-                counter = 0;
+        viewContainer.getChildren().clear();
+
+        int remainder = gradesList.size() > 4? gradesList.size() % 4 : 0;
+        System.out.println(remainder);
+
+        int index = 0;
+        for(int i = 0; i < 4; i ++ ) {
+            VBox col = new VBox();
+            viewContainer.getChildren().add(col);
+
+            int shift = ((remainder > 0)? Math.min(1, remainder) : 0);
+            if (remainder>0) remainder --;
+
+            for(int j = 0;
+                j < maxLen + shift
+                        && index < gradesList.size(); j ++) {
+                col.getChildren().add(
+                        new Label(gradesList.get(index) + "," )
+                );
+                index ++;
             }
         }
-
-        if (gradesList.isEmpty()) {
-            join = "No data has been entered.";
-        }
-
-        column.setText(join);
 
     }
 
@@ -67,3 +76,10 @@ public class DataView extends View {
         updateDataText();
     }
 }
+
+// counter++;
+//
+//         if (counter == 4) {
+//         join = join + System.lineSeparator();
+//         counter = 0;
+//         }

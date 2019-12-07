@@ -142,7 +142,7 @@ public class PrimaryUI {
 
         deleteButton.setOnAction(event -> {
             data.deleteEntry(deleteTextField.getText());
-            data.getParsedGrades().forEach(System.out::println);
+//            data.getParsedGrades().forEach(System.out::println);
 
         });
         deleteBox.getChildren().addAll(new Label("Enter a number to delete "),deleteTextField, deleteButton);
@@ -151,21 +151,6 @@ public class PrimaryUI {
 
         //add to tabPane
         tabPane.getTabs().add(deleteTab);
-
-        Tab createDistributionTab = new Tab("Distribution");
-        createDistributionTab.setClosable(false);
-
-        Button createDistributionButton = new Button("Create Distribution");
-
-        createDistributionButton.setOnAction(event -> {
-            createDistributionTab.setContent(data.distributionChart());
-        });
-
-        createDistributionTab.setOnSelectionChanged(event -> {
-            createDistributionTab.setContent(createDistributionButton);
-        });
-
-        tabPane.getTabs().add(createDistributionTab);
 
 
         tabPane.getSelectionModel().selectedIndexProperty().addListener((o, oldIndex, newIndex) -> {

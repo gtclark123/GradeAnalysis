@@ -48,7 +48,6 @@ class BarChartView extends View {
 
         series1.setName("Amount of Each Grade");
 
-        System.out.println("here");
 
         System.out.println(parsedGrades.size());
 

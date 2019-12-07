@@ -27,7 +27,7 @@ public class DataView extends View {
         return viewContainer;
     }
 
-    private void updateDataText(){
+    private void updateDataText() {
 
         ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
 
@@ -35,12 +35,12 @@ public class DataView extends View {
         String join = "";
         int counter = 0;
 
-        for(int i = 0; i < gradesList.size(); i++){
+        for (int i = 0; i < gradesList.size(); i++) {
             join = join + " " + gradesList.get(i);
             counter++;
 
-            if (counter == 4){
-                join = join + System.lineSeparator() ;
+            if (counter == 4) {
+                join = join + System.lineSeparator();
                 counter = 0;
             }
         }
@@ -54,11 +54,16 @@ public class DataView extends View {
     }
 
     @Override
-    public void onMount() {  updateDataText(); }
+    public void onMount() {
+        updateDataText();
+    }
 
     @Override
-    public void onDismount() {}
+    public void onDismount() {
+    }
 
     @Override
-    public void onDataUpdate() { updateDataText(); }
+    public void onDataUpdate() {
+        updateDataText();
+    }
 }

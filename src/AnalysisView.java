@@ -28,9 +28,13 @@ public class AnalysisView extends View {
         super(data, "Analysis");
     }
 
-    private HBox h(Node ...nodes) { return new HBox(nodes); }
+    private HBox h(Node... nodes) {
+        return new HBox(nodes);
+    }
+
     @Override
-    public Node createView() {;
+    public Node createView() {
+        ;
         viewContainer = new VBox();
 
         entryCount = new Label();
@@ -43,12 +47,12 @@ public class AnalysisView extends View {
 
                 noData = new Label("No data has been loaded"),
                 calculations = new VBox(
-                    h(new Label("Entry Count:\t"), entryCount),
-                    h(new Label("High:\t"), high),
-                    h(new Label("Low:\t"), low),
-                    h(new Label("Mean:\t"), mean),
-                    h(new Label("Median:\t"), median),
-                    h(new Label("Mode:\t"), mode)
+                        h(new Label("Entry Count:\t"), entryCount),
+                        h(new Label("High:\t"), high),
+                        h(new Label("Low:\t"), low),
+                        h(new Label("Mean:\t"), mean),
+                        h(new Label("Median:\t"), median),
+                        h(new Label("Mode:\t"), mode)
                 )
 
         );
@@ -82,13 +86,13 @@ public class AnalysisView extends View {
 
         entries = gradesList.size();
 
-        for(int i = 0; i < gradesList.size(); i++) {
+        for (int i = 0; i < gradesList.size(); i++) {
             total = total + gradesList.get(i);
 
-            if(max < gradesList.get(i)){
+            if (max < gradesList.get(i)) {
                 max = gradesList.get(i);
             }
-            if(min > gradesList.get(i)){
+            if (min > gradesList.get(i)) {
                 min = gradesList.get(i);
             }
 
@@ -98,11 +102,11 @@ public class AnalysisView extends View {
                     count++;
                 }
             }
-                if (count > maxCount) {
-                    maxCount = count;
-                    maxValue = gradesList.get(i);
-                    System.out.println(maxValue);
-                }
+            if (count > maxCount) {
+                maxCount = count;
+                maxValue = gradesList.get(i);
+                System.out.println(maxValue);
+            }
 
             if (count > maxCount) {
                 maxCount = count;
@@ -110,12 +114,10 @@ public class AnalysisView extends View {
                 System.out.println(maxValue);
             }
 
-            middle = entries/2;
-            if(entries%2 == 1){
+            middle = entries / 2;
+            if (entries % 2 == 1) {
                 med = gradesList.get(middle);
-            }
-
-            else{
+            } else {
                 middle = middle - 1;
                 med = gradesList.get(middle);
             }
@@ -124,13 +126,13 @@ public class AnalysisView extends View {
 
         high.setText(Float.toString(max));
         low.setText(Float.toString(min));
-        mean.setText(Float.toString(total/entries));
+        mean.setText(Float.toString(total / entries));
         median.setText(Float.toString(med));
         mode.setText(Float.toString(maxValue));
 
     }
 
-    public void onDismount(){
+    public void onDismount() {
         updateAnalysisText();
 
     }

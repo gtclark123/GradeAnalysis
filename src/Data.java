@@ -1,4 +1,5 @@
 import javafx.scene.chart.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -35,12 +36,18 @@ public class Data {
             this.message = message;
         }
 
-        public String getErrorType() { return type.name; }
-        public String getErrorMessage() { return message; }
+        public String getErrorType() {
+            return type.name;
+        }
+
+        public String getErrorMessage() {
+            return message;
+        }
     }
 
 
     static int ENTRY_UUID = 0;
+
     private class Entry {
 
         float parsedGrade = 0;
@@ -50,7 +57,7 @@ public class Data {
         int id;
 
         public Entry(String entry) {
-            id = ENTRY_UUID ++;
+            id = ENTRY_UUID++;
 
             this.entry = entry;
             parseEntry(entry);
@@ -88,8 +95,13 @@ public class Data {
     private float minBounds = 0;
     private float maxBounds = 100;
 
-    public float getBoundsMax() { return maxBounds; }
-    public float getBoundsMin() { return minBounds; }
+    public float getBoundsMax() {
+        return maxBounds;
+    }
+
+    public float getBoundsMin() {
+        return minBounds;
+    }
 
 
     // List getters (immutable)
@@ -106,7 +118,7 @@ public class Data {
             if (entry.valid)
                 list.add(entry.entry);
             else
-                list.add(entry.entry +"[Err]");
+                list.add(entry.entry + "[Err]");
         }
         return list;
     }
@@ -132,7 +144,7 @@ public class Data {
     }
 
     public void deleteEntry(int deleteID) {
-        if (entryList.removeIf(x->x.id==deleteID)) dispatcher.dataUpdated(this);
+        if (entryList.removeIf(x -> x.id == deleteID)) dispatcher.dataUpdated(this);
     }
 
     public void deleteEntry(Entry deletedEntry) {
@@ -141,82 +153,9 @@ public class Data {
 
     // Last resort...
     public void deleteEntry(String deleteString) {
-        if (entryList.removeIf(x->x.entry == deleteString)) dispatcher.dataUpdated(this);
+        if (entryList.removeIf(x -> x.entry == deleteString)) dispatcher.dataUpdated(this);
     }
 
-    public BarChart distributionChart(){
-        float A = 0;
-        int aCount = 0;
-        float B = 0;
-        int bCount = 0;
-        float C = 0;
-        int cCount = 0;
-        float D = 0;
-        int dCount = 0;
-        float F = 0;
-        int fCount = 0;
-        ArrayList<Float> parsedGrades = this.getParsedGrades();
-
-
-        final NumberAxis xAxis = new NumberAxis();
-        final CategoryAxis yAxis = new CategoryAxis();
-
-        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
-
-
-        xAxis.setTickLabelRotation(90);
-
-        bc.setTitle("Grade Summary");
-        xAxis.setLabel("Grade");
-        yAxis.setLabel("Score");
-
-        XYChart.Series series1 = new XYChart.Series();
-
-        series1.setName("Amount of Each Grade");
-
-        System.out.println("here");
-
-
-        System.out.println(parsedGrades.size());
-
-        for (int i = 0; i < parsedGrades.size(); i++) {
-            if (parsedGrades.get(i) >= 90 && parsedGrades.get(i) <= 100) {
-                A += getParsedGrades().get(i);
-                aCount++;
-            }
-            if (parsedGrades.get(i) >= 80 && parsedGrades.get(i) < 90) {
-                B += getParsedGrades().get(i);
-                bCount++;
-            }
-            if (parsedGrades.get(i) >= 70 && parsedGrades.get(i) < 80) {
-                C += getParsedGrades().get(i);
-                cCount++;
-            }
-            if (parsedGrades.get(i) >= 60 && parsedGrades.get(i) < 70) {
-                D += getParsedGrades().get(i);
-                dCount++;
-            }
-            if (parsedGrades.get(i) < 60) {
-                F += getParsedGrades().get(i);
-                fCount++;
-            }
-        }
-
-        series1.getData().add(new XYChart.Data(A/aCount, "A"));
-        series1.getData().add(new XYChart.Data(B/bCount, "B"));
-
-        series1.getData().add(new XYChart.Data(C/cCount,"C"));
-
-        series1.getData().add(new XYChart.Data(D/dCount,"D"));
-        series1.getData().add(new XYChart.Data(F/fCount,"F"));
-
-
-        bc.getData().addAll(series1);
-
-
-        return bc;
-
-    }
 
     private void clearSession() {
         entryList.clear();
@@ -271,7 +210,7 @@ public class Data {
 
     public void updateBounds(float low, float high) {
         // do the ol' swapparoo.
-        if (low>high) {
+        if (low > high) {
             float temp = low;
             low = high;
             high = temp;
@@ -298,17 +237,18 @@ public class Data {
     }
 
 
-    private void addErrorToStack(ErrorType type, String msg) { errorHistory.add(new Error(type, msg)); }
+    private void addErrorToStack(ErrorType type, String msg) {
+        errorHistory.add(new Error(type, msg));
+    }
 
     private void parseCSV(BufferedReader reader) {
         try {
             String line = reader.readLine();
             while (line != null) {
-                for(String val : line.split(",")) addFullEntry(val);
+                for (String val : line.split(",")) addFullEntry(val);
                 line = reader.readLine();
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             addErrorToStack(ErrorType.IO, "Error parsing from buffer reader.");
         }
     }
@@ -320,8 +260,7 @@ public class Data {
                 addFullEntry(line);
                 line = reader.readLine();
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             addErrorToStack(ErrorType.IO, "Error parsing from buffer reader.");
         }
     }

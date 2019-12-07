@@ -30,17 +30,22 @@ public class ErrorView extends View {
         return viewContainer;
     }
 
-    private void updateErrorText(){
+    private void updateErrorText() {
         errorTable.getItems().clear();
         errorTable.getItems().addAll(data.getErrors());
     }
 
     @Override
-    public void onMount() { updateErrorText(); }
+    public void onMount() {
+        updateErrorText();
+    }
 
     @Override
-    public void onDismount() {}
+    public void onDismount() {
+    }
 
     @Override
-    public void onDataUpdate() { updateErrorText(); }
+    public void onDataUpdate() {
+        updateErrorText();
+    }
 }

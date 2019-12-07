@@ -12,6 +12,7 @@ public class Data {
         NAN("Not A Number"),
         IO("IO Error"),
         USAGE("Incorrect Use"),
+        NOTFOUND("Value not found"),
         BELOWBOUNDS("Below Bounds"),
         ABOVEBOUNDS("Above Bounds");
 
@@ -38,7 +39,6 @@ public class Data {
         public String getErrorType() { return type.name; }
         public String getErrorMessage() { return message; }
     }
-
 
     static int ENTRY_UUID = 0;
     private class Entry {
@@ -141,16 +141,16 @@ public class Data {
 
     public void deleteEntry(String deleteString)
     {
-        int index = -1;
-        while(++index < entryList.size() && !entryList.get(index).entry.equals(deleteString));
-
-        if (index < entryList.size()) {
-            Entry e = entryList.get(index);
-            dispatcher.dataUpdated(this);
-            addUIInteraction(e.entry + " was removed");
-        } else {
-            addUIInteraction(deleteString + "was not removed.");
+        for(int i = 0; i < entryList.size(); i++) {
+            Entry e = entryList.get(i);
+            if (e.entry.equals(deleteString)) {
+                entryList.remove(i);
+                addUIInteraction("Removed entry: " + e.entry);
+                dispatcher.dataUpdated(this);
+                return;
+            }
         }
+        addErrorToStack(ErrorType.NOTFOUND, deleteString + " wasn't deleted.");
     }
 
     public BarChart distributionChart(){

@@ -31,17 +31,41 @@ public class DataView extends View {
 
         ArrayList<String> gradesList = new ArrayList<>(data.getAllEntries());
 
-        Collections.sort(gradesList);
+        Collections.sort(gradesList, Collections.reverseOrder());
         String join = "";
         int counter = 0;
+        int count = 0;
+        int size = gradesList.size();
+        int amount = size/4;
+        int rem = size%4;
+        int num = 0;
 
-        for(int i = 0; i < gradesList.size(); i++){
-            join = join + " " + gradesList.get(i);
-            counter++;
+        //add another row if the remainder isn't 0
+        if(rem != 0){
+            num = amount + 1;
+        }
 
-            if (counter == 4){
-                join = join + System.lineSeparator() ;
-                counter = 0;
+        for(int i = 0; i < num; i++){
+            counter = count;
+
+
+            if((rem !=0) && ((i+1) == num)){
+
+                for(int k = 0; k < rem; k++){
+
+                    join = join + gradesList.get(counter) + " ";
+                    counter = counter + amount;
+                }
+
+            }
+
+            else {
+                for (int j = 0; j < 4; j++) {
+                    join = join + gradesList.get(counter) + " ";
+                    counter = counter + amount;
+                }
+                count++;
+                join += "\n";
             }
         }
 

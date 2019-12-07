@@ -81,7 +81,7 @@ public class Data {
     // The error history
     private ArrayList<Error> errorHistory;
     // The interaction history
-    private ArrayList<String> interactionHistory;
+    public ArrayList<String> interactionHistory;
 
     // Dispatches when data has been updated or other
     private EventDispatcher dispatcher;
@@ -230,6 +230,53 @@ public class Data {
 
         bc.getData().addAll(series1);
 
+        interactionHistory.add("Distribution Chart was generated: ========================================== ");
+        String barValue = "||F: ";
+
+        for(int iterator = 0; iterator < F/fCount;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+fCount+")";
+        interactionHistory.add(barValue);
+
+        barValue = "||D: ";
+
+        for(int iterator = 0; iterator < D/dCount;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+dCount+")";
+        interactionHistory.add(barValue);
+
+        barValue = "||C: ";
+
+        for(int iterator = 0; iterator < C/cCount;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+cCount+")";
+        interactionHistory.add(barValue);
+
+        barValue = "||B: ";
+
+        for(int iterator = 0; iterator < B/bCount;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+bCount+")";
+        interactionHistory.add(barValue);
+
+        barValue = "||A: ";
+
+        for(int iterator = 0; iterator < A/aCount;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+aCount+")";
+        interactionHistory.add(barValue);
+        barValue = "";
+
 
         return bc;
 
@@ -266,6 +313,9 @@ public class Data {
 
     // open a file and write a report ...
 
+    /**
+     *
+     */
     public void writeReportToFile()
     {
         System.out.println("Writing export?");

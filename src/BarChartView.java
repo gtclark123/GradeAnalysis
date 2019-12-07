@@ -24,7 +24,6 @@ class BarChartView extends View {
 
     private void updateChart(){
         viewContainer.getChildren().clear();
-
         float A = 0;
         float B = 0;
         float C = 0;
@@ -70,6 +69,56 @@ class BarChartView extends View {
                 F++;
             }
         }
+
+        //
+        data.interactionHistory.add("Bar Chart was generated: ========================================== ");
+        String barValue = "||F: ";
+
+        for(int iterator = 0; iterator < F;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+F+")";
+        data.interactionHistory.add(barValue);
+
+        barValue = "||D: ";
+
+        for(int iterator = 0; iterator < D;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+D+")";
+        data.interactionHistory.add(barValue);
+
+        barValue = "||C: ";
+
+        for(int iterator = 0; iterator < C;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+C+")";
+        data.interactionHistory.add(barValue);
+
+        barValue = "||B: ";
+
+        for(int iterator = 0; iterator < B;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+B+")";
+        data.interactionHistory.add(barValue);
+
+        barValue = "||A: ";
+
+        for(int iterator = 0; iterator < A;iterator++)
+        {
+            barValue+= "*";
+        }
+        barValue+= "("+A+")";
+        data.interactionHistory.add(barValue);
+        barValue = "";
+
+        //
 
         series1.getData().add(new XYChart.Data(A, "A"));
         series1.getData().add(new XYChart.Data(B, "B"));

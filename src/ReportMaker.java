@@ -30,7 +30,8 @@ public class ReportMaker {
 
             writer.println();
 
-            // Put some calculation output here...
+            // print analysis calculations
+            printAnalysis(writer);
 
             writer.close();
         }
@@ -43,6 +44,30 @@ public class ReportMaker {
             e.printStackTrace();
             data.addErrorToStack(Data.ErrorType.IO, e.getMessage());
         }
+    }
+
+    private void printAnalysis(PrintWriter writer) {
+        // Put some calculation output here...
+        Analyzer analysis = (new Analyzer(data)).compute();
+        writer.println("Computations: \n");
+
+        writer.print("entries:");
+        writer.println(Integer.toString(analysis.entries));
+
+        writer.print("max:");
+        writer.println(Float.toString(analysis.max));
+
+        writer.print("min:");
+        writer.println(Float.toString(analysis.min));
+
+        writer.print("mean:");
+        writer.println(Float.toString(analysis.total/analysis.entries));
+
+        writer.print("median:");
+        writer.println(Float.toString(analysis.med));
+
+        writer.print("mode:");
+        writer.println(Float.toString(analysis.mode));
     }
 
 }

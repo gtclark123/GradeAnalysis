@@ -69,60 +69,13 @@ public class AnalysisView extends View {
             noData.setVisible(false);
         }
 
-        entryCount.setText(Integer.toString(data.getAllEntries().size()));
-
-        float total = 0;
-        float min = gradesList.get(0);
-        float max = gradesList.get(0);
-        float maxValue = 0;
-        int maxCount = 0;
-        int middle = 0;
-        int entries = 0;
-        float med = 0;
-
-        entries = gradesList.size();
-
-        for(int i = 0; i < gradesList.size(); i++) {
-            total = total + gradesList.get(i);
-
-            if(max < gradesList.get(i)){
-                max = gradesList.get(i);
-            }
-            if(min > gradesList.get(i)){
-                min = gradesList.get(i);
-            }
-
-            int count = 0;
-            for (int j = 0; j < gradesList.size(); j++) {
-                if ( Float.compare(gradesList.get(j), gradesList.get(i)) == 0) {
-                    count++;
-                }
-            }
-            if (count > maxCount) {
-                maxCount = count;
-                maxValue = gradesList.get(i);
-                System.out.println(maxValue);
-            }
-
-            if (count > maxCount) {
-                maxCount = count;
-                maxValue = gradesList.get(i);
-                System.out.println(maxValue);
-            }
-
-        }
-
-        middle = entries/2;
-        if (entries % 2 != 1) {
-            middle = middle - 1;
-        }
-        med = gradesList.get(middle);
-
-        high.setText(Float.toString(max));
-        low.setText(Float.toString(min));
-        mean.setText(Float.toString(total/entries));
-        median.setText(Float.toString(med));
-        mode.setText(Float.toString(maxValue));
+        Analyzer analysis = (new Analyzer(data)).compute();
+        entryCount.setText(Integer.toString(analysis.entries));
+        high.setText(Float.toString(analysis.max));
+        low.setText(Float.toString(analysis.min));
+        mean.setText(Float.toString(analysis.total/analysis.entries));
+        median.setText(Float.toString(analysis.med));
+        mode.setText(Float.toString(analysis.mode));
 
     }
 

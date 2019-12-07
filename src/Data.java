@@ -63,7 +63,7 @@ public class Data {
                 interactionHistory.add("Entry " + parsedGrade + " was added. ");
             } catch (NumberFormatException e) {
                 addErrorToStack(ErrorType.NAN, entry + " is not valid float value.");
-                interactionHistory.add(entry + " is not a valid float value.");
+                //interactionHistory.add(entry + " is not a valid float value.");
                 isNumber = false;
             }
         }
@@ -286,6 +286,7 @@ public class Data {
         float newLow = minBounds, newHigh = maxBounds;
         try {
             newLow = Float.parseFloat(low);
+
         } catch (Exception ignore) {
             addErrorToStack(ErrorType.USAGE, "Min bound-" + low + " is not valid.");
         }
